@@ -20,6 +20,12 @@ module.exports = appInfo => {
         database: 'test',
       },
     },
+    sequelize: {
+      dialect: 'mysql',
+      host: '127.0.0.1',
+      port: 63306,
+      database: 'test',
+    },
   };
 
   // use for cookie sign key, should change to your own and keep security

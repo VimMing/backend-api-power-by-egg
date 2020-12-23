@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const LunarCalendar = require('lunar-calendar');
 class UserController extends Controller {
   async index() {
     const { ctx } = this;
@@ -60,7 +61,18 @@ class UserController extends Controller {
   async myfriends() {
     const ctx = this.ctx;
     if (ctx.isAuthenticated()) {
-      ctx.body = await ctx.service.user.getMyFriends(ctx.user.id);
+      const friends = await ctx.service.user.getMyFriends(ctx.user.id) || [];
+      ctx.body = friends.map(i => {
+        const d = i.birthday;
+        if (+i.is_lunar) {
+          const today = new Date();
+          i.solar_birthday = LunarCalendar.lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+          ctx.logger.info(typeof i.birthday.getFullYear());
+        } else {
+          i.solar_birthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+        }
+        return i;
+      });
     } else {
       ctx.throw(401, '权限校验失败', { data: null });
     }

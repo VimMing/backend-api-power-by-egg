@@ -14,10 +14,15 @@
     "egg-passport-local": "^1.2.1",
     "egg-rest": "^2.1.0",
     "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^6.0.0",
     "egg-validate": "^2.0.2",
+    "lunar-calendar": "^0.1.4",
+    "mysql2": "^2.2.5",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
     "egg-bin": "^4.11.0",
@@ -25,9 +30,8 @@
     "egg-mock": "^3.21.0",
     "eslint": "^5.13.0",
     "eslint-config-egg": "^7.1.0",
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "git-cz": "^4.7.6"
+    "git-cz": "^4.7.6",
+    "sequelize-cli": "^6.2.0"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -42,7 +46,8 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "commit": "git-cz"
   },
   "ci": {
     "version": "10"
