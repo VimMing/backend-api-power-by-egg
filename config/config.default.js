@@ -25,6 +25,7 @@ module.exports = appInfo => {
       host: '127.0.0.1',
       port: 63306,
       database: 'test',
+      password: 'mysql123',
     },
   };
 
