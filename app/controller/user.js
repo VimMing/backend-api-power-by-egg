@@ -3,15 +3,6 @@
 const Controller = require('egg').Controller;
 const LunarCalendar = require('lunar-calendar');
 class UserController extends Controller {
-  async index() {
-    const { ctx } = this;
-    if (ctx.isAuthenticated()) {
-      // show user info
-      this.ctx.body = this.ctx.state.user;
-    } else {
-      this.ctx.body = this.ctx.state.user;
-    }
-  }
   async createToken() {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {
@@ -22,7 +13,7 @@ class UserController extends Controller {
       });
       ctx.body = {
         data: 'Bearer ' + token,
-        code: 0,
+        errcode: 0,
       };
     } else {
       ctx.throw(401, '没通过权限校验', { data: null });
@@ -41,17 +32,14 @@ class UserController extends Controller {
     }
   }
 
-  async show() {
-    // 新增用户
-    this.ctx.body = this.ctx.state.user;
-  }
-
-  async edit() {
-    console.log('hello world');
+  async createByJwt() {
+    await this.jwtToOauth();
+    this.create();
   }
 
   async update() {
     console.log('hello world');
+    // 验证是否是他的朋友
   }
 
   async wxappLoginBycode() {
@@ -79,21 +67,20 @@ class UserController extends Controller {
       await this.createToken();
     }
   }
-
-  async destroy() {
-    console.log('hello world');
-  }
-  async myfriendsByJwt() {
+  async jwtToOauth() {
     const ctx = this.ctx;
     const user = ctx.state.user;
     await ctx.login(user);
+  }
+  async myfriendsByJwt() {
+    await this.jwtToOauth();
     await this.myfriends();
   }
   async myfriends() {
     const ctx = this.ctx;
     if (ctx.isAuthenticated()) {
       const friends = await ctx.service.user.getMyFriends(ctx.user.id) || [];
-      ctx.body = friends.map(i => {
+      const data = friends.map(i => {
         const d = i.birthday;
         if (+i.is_lunar) {
           const today = new Date();
@@ -104,6 +91,10 @@ class UserController extends Controller {
         }
         return i;
       });
+      ctx.body = {
+        errcode: 0,
+        data,
+      };
     } else {
       ctx.throw(401, '权限校验失败', { data: null });
     }
