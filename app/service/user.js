@@ -2,10 +2,9 @@
 
 const Service = require('egg').Service;
 class UserService extends Service {
-  async find(uid) {
-    // assume we have the user id then trying to get the user details from database
-    const user = await this.app.mysql.get('user', { id: uid });
-    return { ...user };
+  async find(query) {
+    const user = await this.app.mysql.get('user', query);
+    return user;
   }
   async getMyFriends(uid) {
     const mysql = this.app.mysql;
@@ -16,6 +15,11 @@ class UserService extends Service {
       res = friends || [];
     }
     return res;
+  }
+  async register({ open_id } = {}) {
+    const mysql = this.app.mysql;
+    const res = await mysql.insert('user', { open_id });
+    return await this.app.mysql.get('user', { id: res.insertId });
   }
   async addFriend({ name, birthday, isLunar }, user) {
     const mysql = this.app.mysql;

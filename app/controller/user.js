@@ -7,7 +7,6 @@ class UserController extends Controller {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {
       // show user info
-      ctx.logger.info('xxxxxx');
       this.ctx.body = this.ctx.state.user;
     } else {
       this.ctx.body = this.ctx.state.user;
@@ -55,8 +54,40 @@ class UserController extends Controller {
     console.log('hello world');
   }
 
+  async wxappLoginBycode() {
+    const { ctx, app } = this;
+    const { key, secret } = app.config.passportWeapp;
+    const code = ctx.query.code;
+    const url = 'https://api.weixin.qq.com/sns/jscode2session';
+    const result = await ctx.curl(`${url}?appid=${key}&secret=${secret}&js_code=${code}&grant_type=authorization_code`);
+    ctx.status = result.status;
+    const data = JSON.parse(Buffer.from(result.data).toString());
+    // ctx.logger.info(result);
+    if (data.errcode) {
+      ctx.body = data;
+    } else {
+      let user = await ctx.service.user.find({
+        open_id: data.openid,
+      });
+      ctx.logger.info('user:', user, data.openid);
+      if (!user) {
+        user = await ctx.service.user.register({
+          open_id: data.openid,
+        });
+      }
+      await ctx.login(user);
+      await this.createToken();
+    }
+  }
+
   async destroy() {
     console.log('hello world');
+  }
+  async myfriendsByJwt() {
+    const ctx = this.ctx;
+    const user = ctx.state.user;
+    await ctx.login(user);
+    await this.myfriends();
   }
   async myfriends() {
     const ctx = this.ctx;
