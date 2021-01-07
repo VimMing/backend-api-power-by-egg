@@ -12,4 +12,5 @@ module.exports = app => {
   router.get('/api/user/my-friends', controller.user.myfriends);
   router.get('/api/user/jwt/my-friends', app.jwt, controller.user.myfriendsByJwt);
   router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
+  router.get('/api/user/show', controller.user.show);
 };
