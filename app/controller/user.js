@@ -2,6 +2,23 @@
 
 const Controller = require('egg').Controller;
 const LunarCalendar = require('lunar-calendar');
+function lunarToSolar(y, m, d){
+ // 
+ let map = {['2020']: 4, ["2023"]: 2, ["2025"]: 6, ["2028"]: 5, ["2031"]: 3, ["2033"]: 11, ["2036"]: 6, ["2039"]: 5, ["2042"]: 2};
+ let ly = y - 1, lm = m;
+ if(map[ly] && map[ly] < lm){
+    lm = lm + 1;
+ }
+ if(map[y] && map[y] < m){
+    m = m + 1;
+ }
+ let l_s = LunarCalendar.lunarToSolar(ly, lm, d);
+ if(parseInt(l_s.year) === parseInt(y)){
+    return l_s
+ }
+
+ return LunarCalendar.lunarToSolar(y, m, d)
+};
 class UserController extends Controller {
   async createToken() {
     const { ctx } = this;
@@ -130,7 +147,7 @@ class UserController extends Controller {
           const d = i.birthday;
           if (i.isLunar) {
             const today = new Date();
-            i.solarBirthday = LunarCalendar.lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+            i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
             ctx.logger.info(typeof i.birthday.getFullYear());
           } else {
             i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
