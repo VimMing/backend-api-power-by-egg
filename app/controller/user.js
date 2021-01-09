@@ -130,7 +130,7 @@ class UserController extends Controller {
           const d = i.birthday;
           if (i.isLunar) {
             const today = new Date();
-            i.solarBirthday = LunarCalendar.lunarToSolar(today.getFullYear() - 1, d.getMonth() + 1, d.getDate());
+            i.solarBirthday = LunarCalendar.lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
             ctx.logger.info(typeof i.birthday.getFullYear());
           } else {
             i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
