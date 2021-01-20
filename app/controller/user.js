@@ -2,6 +2,8 @@
 
 const Controller = require('egg').Controller;
 const LunarCalendar = require('lunar-calendar');
+const nanoid = require('nanoid');
+
 function lunarToSolar(y, m, d) {
   //
   const map = { 2020: 4, 2023: 2, 2025: 6, 2028: 5, 2031: 3, 2033: 11, 2036: 6, 2039: 5, 2042: 2 };
@@ -86,7 +88,47 @@ class UserController extends Controller {
 
   async show() {
     const ctx = this.ctx;
-    ctx.body = await ctx.model.User.findByPk(2);
+    const friend = await ctx.model.MyFriend.findOne({
+      where: {
+        shareCode: ctx.query.shareCode,
+      },
+    });
+    ctx.body = {
+      data: friend,
+      errcode: 0,
+    };
+  }
+
+  async addFriendByOtherManShare() {
+    const id = this.ctx.id;
+    const ctx = this.ctx;
+    if (ctx.isAuthenticated() && id) {
+      const friend = ctx.model.MyFriend.findByPk(id);
+      if (+friend.userId !== +ctx.user.id) {
+        const res = await ctx.model.MyFriend.create({
+          name: friend.name,
+          userId: ctx.user.id,
+          birthday: friend.birthday,
+          isLunar: friend.isLunar,
+          zodiac: friend.zodiac,
+          shareCode: nanoid.nanoid(),
+        });
+        ctx.body = {
+          data: res,
+          errcode: 0,
+        };
+      } else {
+        ctx.body = {
+          errcode: 1,
+          errMessage: '她/他已经是你的朋友了',
+        };
+      }
+    } else {
+      ctx.status = 401;
+      ctx.body = {
+        code: 1,
+      };
+    }
   }
 
   async wxappLoginBycode() {
@@ -145,6 +187,11 @@ class UserController extends Controller {
       if (friends) {
         ctx.logger.info(friends);
         data = friends.map(i => {
+          if (!i.shareCode) {
+            i.update({
+              shareCode: nanoid.nanoid(),
+            });
+          }
           i = i.get();
           const d = i.birthday;
           if (i.isLunar) {

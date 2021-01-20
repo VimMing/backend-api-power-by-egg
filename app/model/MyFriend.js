@@ -16,6 +16,10 @@ module.exports = app => {
       field: 'is_lunar',
     },
     zodiac: INTEGER,
+    shareCode: {
+      type: STRING,
+      field: 'share_code',
+    },
     createdAt: {
       type: DATE,
       field: 'created_at',
