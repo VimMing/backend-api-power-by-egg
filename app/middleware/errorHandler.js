@@ -13,7 +13,7 @@ module.exports = () => {
         : err.message;
 
       // Reading from the properties of error object and set it to the response
-      ctx.body = { error };
+      ctx.body = { errMessage: error };
       if (status === 422) {
         ctx.body.detail = err.errors;
       }

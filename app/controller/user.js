@@ -86,7 +86,7 @@ class UserController extends Controller {
     // 验证是否是他的朋友
   }
 
-  async show() {
+  async getFriendByShareCode() {
     const ctx = this.ctx;
     const friend = await ctx.model.MyFriend.findOne({
       where: {
@@ -99,12 +99,34 @@ class UserController extends Controller {
     };
   }
 
+  async addFriendByOtherManShareByJwt() {
+    await this.jwtToOauth();
+    await this.addFriendByOtherManShare();
+  }
+
   async addFriendByOtherManShare() {
-    const id = this.ctx.id;
+    const id = this.ctx.query.id;
     const ctx = this.ctx;
-    if (ctx.isAuthenticated() && id) {
-      const friend = ctx.model.MyFriend.findByPk(id);
-      if (+friend.userId !== +ctx.user.id) {
+    if (!id) {
+      ctx.body = {
+        code: 1,
+        errMessage: 'id参数缺失',
+      };
+      throw ({
+        message: 'id参数缺失',
+        status: 200,
+      });
+    }
+    if (ctx.isAuthenticated()) {
+      const friend = await ctx.model.MyFriend.findByPk(id);
+      // ctx.logger.info('friend', friend);
+      if (!friend) {
+        throw ({
+          message: '记录不存在',
+          status: 200,
+        });
+      }
+      if (friend && +friend.userId !== +ctx.user.id) {
         const res = await ctx.model.MyFriend.create({
           name: friend.name,
           userId: ctx.user.id,
@@ -127,6 +149,7 @@ class UserController extends Controller {
       ctx.status = 401;
       ctx.body = {
         code: 1,
+        errMessage: '权限校验失败',
       };
     }
   }
