@@ -93,8 +93,20 @@ class UserController extends Controller {
         shareCode: ctx.query.shareCode,
       },
     });
+    let i = null;
+    if(friend){
+      i = friend.get();
+      const d = i.birthday;
+      if (i.isLunar) {
+         const today = new Date();
+         i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+         ctx.logger.info(typeof i.birthday.getFullYear());
+       } else {
+         i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+       }
+    }    
     ctx.body = {
-      data: friend,
+      data: i || friend,
       errcode: 0,
     };
   }
