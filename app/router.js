@@ -13,6 +13,7 @@ module.exports = app => {
   router.get('/api/user/jwt/my-friends', app.jwt, controller.user.myfriendsByJwt);
   router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
   router.get('/api/user/getFriendByShareCode', controller.user.getFriendByShareCode);
+  router.get('/api/user/deleteFriendByJwt', app.jwt, controller.user.destoryByJwt);
   router.get('/api/user/addFriendByOtherManShareByJwt', app.jwt, controller.user.addFriendByOtherManShareByJwt);
   // router.get('/api/history/baike', controller.history.baike);
   router.get('/api/history/getWhatHappenedFromGivenDate', controller.history.getWhatHappenedFromGivenDate);
