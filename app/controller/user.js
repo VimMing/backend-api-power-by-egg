@@ -40,6 +40,42 @@ class UserController extends Controller {
       ctx.throw(401, '没通过权限校验', { data: null });
     }
   }
+  
+  async destory(){
+    const { ctx } = this;
+    const id = ctx.query.id;
+    if (!id) {
+      throw ({
+        message: 'id参数缺失',
+        status: 400,
+      });
+    }
+    if (ctx.isAuthenticated()) {
+      const friend = await ctx.model.MyFriend.findOne({
+        where: {
+          id: id,
+          userId: ctx.user.id
+        },
+      });
+      if(friend){
+          await friend.destroy();
+          ctx.body = {
+            errCode: 0
+          }
+          ctx.status = 200
+      }else{
+        ctx.throw({
+          status: 400,
+          message: '生日不存在，请确认'
+        })
+      } 
+    }else{
+      ctx.throw({
+        status: 401,
+        message: '权限校验失败'
+      })
+    }
+  }
 
   async create() {
     // 新增用户
@@ -79,6 +115,11 @@ class UserController extends Controller {
   async createByJwt() {
     await this.jwtToOauth();
     await this.create();
+  }
+  
+  async destoryByJwt(){
+    await this.jwtToOauth();
+    await this.destory();
   }
 
   async update() {
