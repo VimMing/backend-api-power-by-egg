@@ -40,8 +40,8 @@ class UserController extends Controller {
       ctx.throw(401, '没通过权限校验', { data: null });
     }
   }
-  
-  async destory(){
+
+  async destory() {
     const { ctx } = this;
     const id = ctx.query.id;
     if (!id) {
@@ -53,27 +53,27 @@ class UserController extends Controller {
     if (ctx.isAuthenticated()) {
       const friend = await ctx.model.MyFriend.findOne({
         where: {
-          id: id,
-          userId: ctx.user.id
+          id,
+          userId: ctx.user.id,
         },
       });
-      if(friend){
-          await friend.destroy();
-          ctx.body = {
-            errCode: 0
-          }
-          ctx.status = 200
-      }else{
+      if (friend) {
+        await friend.destroy();
+        ctx.body = {
+          errCode: 0,
+        };
+        ctx.status = 200;
+      } else {
         ctx.throw({
           status: 400,
-          message: '生日不存在，请确认'
-        })
-      } 
-    }else{
+          message: '生日不存在，请确认',
+        });
+      }
+    } else {
       ctx.throw({
         status: 401,
-        message: '权限校验失败'
-      })
+        message: '权限校验失败',
+      });
     }
   }
 
@@ -116,8 +116,8 @@ class UserController extends Controller {
     await this.jwtToOauth();
     await this.create();
   }
-  
-  async destoryByJwt(){
+
+  async destoryByJwt() {
     await this.jwtToOauth();
     await this.destory();
   }
@@ -135,17 +135,17 @@ class UserController extends Controller {
       },
     });
     let i = null;
-    if(friend){
+    if (friend) {
       i = friend.get();
       const d = i.birthday;
       if (i.isLunar) {
-         const today = new Date();
-         i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
-         ctx.logger.info(typeof i.birthday.getFullYear());
-       } else {
-         i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
-       }
-    }    
+        const today = new Date();
+        i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+        ctx.logger.info(typeof i.birthday.getFullYear());
+      } else {
+        i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+      }
+    }
     ctx.body = {
       data: i || friend,
       errcode: 0,
@@ -206,6 +206,52 @@ class UserController extends Controller {
       };
     }
   }
+
+  async test() {
+    const { ctx } = this;
+    await this.sendSubscribeMsg();
+    ctx.body = { h: 'hello world' };
+  }
+
+  async sendSubscribeMsg() {
+    const { ctx } = this;
+    const requestData = {
+      touser: 'oJzdG42QHZDLqDcHbvNs9xu8gMzs',
+      template_id: 'E3YdVL8G4BZaFJ9ORfp6-nKtRhB1oyh-HWM8zKJpjj8',
+      page: '/pages/index/index',
+      data: {
+        time1: {
+          value: '2019年10月1日',
+        },
+        thing3: {
+          value: '佘慧民',
+        },
+        thing2: {
+          value: 'xxx',
+        },
+      },
+    };
+
+    const { host } = this.app.config.passportWeapp;
+    // 获取access_token
+    const tokenJson = await this.ctx.service.wx.getAccessToken();
+    const res = await this.ctx.curl(`${host}/cgi-bin/message/subscribe/send?access_token=${tokenJson.access_token}
+    `, {
+      method: 'POST',
+      contentType: 'json',
+      data: requestData,
+      dataType: 'json',
+    });
+
+    if (res.data.errmsg === 'ok') {
+      ctx.logger.info('========推送成功========');
+      // TODO
+    } else {
+      ctx.logger.info('========推送失败========', res.data);
+      // TODO
+    }
+  }
+
 
   async wxappLoginBycode() {
     const { ctx, app } = this;

@@ -10,6 +10,7 @@ module.exports = app => {
   router.get('/api/user/create-token', controller.user.createToken);
   router.get('/api/user/wxapp-login-by-code', controller.user.wxappLoginBycode);
   router.get('/api/user/my-friends', controller.user.myfriends);
+  router.get('/api/user/test', controller.user.test);
   router.get('/api/user/jwt/my-friends', app.jwt, controller.user.myfriendsByJwt);
   router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
   router.get('/api/user/getFriendByShareCode', controller.user.getFriendByShareCode);
