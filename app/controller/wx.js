@@ -13,11 +13,11 @@ class WxController extends Controller {
       when: body.when,
       content: ctx.model.MyFriend.findByPk(body.birthdayId),
       templateId: 'E3YdVL8G4BZaFJ9ORfp6-nKtRhB1oyh-HWM8zKJpjj8',
-      status: 0
-    })
-      ctx.body = {
-        errCode: 0
-      };
+      status: 0,
+    });
+    ctx.body = {
+      errCode: 0,
+    };
   }
 }
 

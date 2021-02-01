@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = app => {
-  const { INTEGER, DATE} = app.Sequelize;
+  const { INTEGER, DATE } = app.Sequelize;
 
   const ShareBirthday = app.model.define('ShareBirthday', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },

@@ -12,7 +12,7 @@ module.exports = app => {
     name: STRING,
     when: DATE,
     content: {
-      type: JSON
+      type: JSON,
     },
     status: INTEGER, // 0 , 1 success, 2 fail
     templateId: {
