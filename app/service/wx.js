@@ -2,6 +2,7 @@
 
 const Service = require('egg').Service;
 const { Op } = require('sequelize');
+const utils = require('../utils');
 class WxService extends Service {
   async getAccessToken() {
     const { key: appId, secret: appSecert, host } = this.app.config.passportWeapp;
@@ -51,6 +52,37 @@ class WxService extends Service {
       },
       include: ctx.model.User,
     });
+    if (res) {
+      for (const i of res) {
+        const touser = i.user.openId;
+        const template_id = i.templateId;
+        const page = `/pages/index/index?id=${i.content.id}`;
+        const d = new Date(i.content.birthday);
+        const name = i.content.name;
+        let solarBirthday = '';
+        if (i.content.isLunar && d) {
+          const today = new Date();
+          solarBirthday = utils.lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+        } else if (d) {
+          solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+        }
+        const requestData = {
+          touser,
+          template_id,
+          page,
+          data: {
+            time1: { value: `${solarBirthday.year}年${solarBirthday.month}月${solarBirthday.day}日` },
+            thing3: {
+              value: name,
+            },
+            thing2: {
+              value: 'xxx',
+            },
+          },
+        };
+        ctx.logger.info(requestData);
+      }
+    }
     return res;
     // const requestData = {
     //   touser: 'oJzdG42QHZDLqDcHbvNs9xu8gMzs',

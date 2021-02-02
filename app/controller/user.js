@@ -141,7 +141,7 @@ class UserController extends Controller {
       if (i.isLunar) {
         const today = new Date();
         i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
-        ctx.logger.info(typeof i.birthday.getFullYear());
+        // ctx.logger.info(typeof i.birthday.getFullYear());
       } else {
         i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
       }
@@ -273,7 +273,7 @@ class UserController extends Controller {
           if (i.isLunar) {
             const today = new Date();
             i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
-            ctx.logger.info(typeof i.birthday.getFullYear());
+            // ctx.logger.info(typeof i.birthday.getFullYear());
           } else {
             i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
           }
