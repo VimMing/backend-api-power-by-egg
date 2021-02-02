@@ -34,6 +34,5 @@ module.exports = app => {
   }, {
     tableName: 'wx_subscription',
   });
-
   return WxSubscription;
 };

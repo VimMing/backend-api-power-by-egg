@@ -207,52 +207,6 @@ class UserController extends Controller {
     }
   }
 
-  async test() {
-    const { ctx } = this;
-    await this.sendSubscribeMsg();
-    ctx.body = { h: 'hello world' };
-  }
-
-  async sendSubscribeMsg() {
-    const { ctx } = this;
-    const requestData = {
-      touser: 'oJzdG42QHZDLqDcHbvNs9xu8gMzs',
-      template_id: 'E3YdVL8G4BZaFJ9ORfp6-nKtRhB1oyh-HWM8zKJpjj8',
-      page: '/pages/index/index',
-      data: {
-        time1: {
-          value: '2019年10月1日',
-        },
-        thing3: {
-          value: '佘慧民',
-        },
-        thing2: {
-          value: 'xxx',
-        },
-      },
-    };
-
-    const { host } = this.app.config.passportWeapp;
-    // 获取access_token
-    const tokenJson = await this.ctx.service.wx.getAccessToken();
-    const res = await this.ctx.curl(`${host}/cgi-bin/message/subscribe/send?access_token=${tokenJson.access_token}
-    `, {
-      method: 'POST',
-      contentType: 'json',
-      data: requestData,
-      dataType: 'json',
-    });
-
-    if (res.data.errmsg === 'ok') {
-      ctx.logger.info('========推送成功========');
-      // TODO
-    } else {
-      ctx.logger.info('========推送失败========', res.data);
-      // TODO
-    }
-  }
-
-
   async wxappLoginBycode() {
     const { ctx, app } = this;
     const { key, secret } = app.config.passportWeapp;

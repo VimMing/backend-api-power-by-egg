@@ -7,17 +7,26 @@ class WxController extends Controller {
     const { ctx } = this;
     ctx.validate({ when: 'date', birthdayId: 'int' });
     const body = ctx.request.body;
+    const friend = await ctx.model.MyFriend.findByPk(+body.birthdayId);
+    ctx.logger.info(friend);
     ctx.model.WxSubscription.create({
       userId: ctx.user.id,
       name: 'birthdayNotice',
       when: body.when,
-      content: ctx.model.MyFriend.findByPk(body.birthdayId),
+      content: friend,
       templateId: 'E3YdVL8G4BZaFJ9ORfp6-nKtRhB1oyh-HWM8zKJpjj8',
       status: 0,
     });
     ctx.body = {
       errCode: 0,
     };
+  }
+
+  async test() {
+    const { ctx } = this;
+    const res = await ctx.service.wx.sendBirthdayNotice();
+    // await this.sendSubscribeMsg();
+    ctx.body = { res };
   }
 }
 
