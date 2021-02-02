@@ -96,7 +96,7 @@ class UserController extends Controller {
           };
         }
       } else {
-        ctx.logger.info('user:', ctx.user);
+        // ctx.logger.info('user:', ctx.user);
         friend = await ctx.model.MyFriend.create({
           name,
           birthday,
@@ -233,7 +233,7 @@ class UserController extends Controller {
         //   open_id: data.openid,
         // });
         user = (await ctx.model.User.create({ openId: data.openid }));
-        ctx.logger.info('user:', user, data.openid);
+        // ctx.logger.info('user:', user, data.openid);
       }
       await ctx.login(user.dataValues);
       await this.createToken();
@@ -261,7 +261,7 @@ class UserController extends Controller {
       let data = [];
       // ctx.logger.info('user: hello world', friends);
       if (friends) {
-        ctx.logger.info(friends);
+        // ctx.logger.info(friends);
         data = friends.map(i => {
           if (!i.shareCode) {
             i.update({

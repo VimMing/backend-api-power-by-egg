@@ -15,7 +15,7 @@ module.exports = app => {
   router.get('/api/user/jwt/my-friends', app.jwt, controller.user.myfriendsByJwt);
   router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
   router.post('/api/wx/addBirthdayNotice', app.jwt, jwt2auth, controller.wx.addBirthdayNotice);
-  router.get('/api/user/test', app.jwt, jwt2auth, controller.wx.test);
+  router.get('/api/wx/sendBirthdayNotice', app.jwt, jwt2auth, controller.wx.sendBirthdayNotice);
   router.get('/api/user/getFriendByShareCode', controller.user.getFriendByShareCode);
   router.get('/api/user/deleteFriendByJwt', app.jwt, controller.user.destoryByJwt);
   router.get('/api/user/addFriendByOtherManShareByJwt', app.jwt, controller.user.addFriendByOtherManShareByJwt);

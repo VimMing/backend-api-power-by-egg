@@ -1,14 +1,11 @@
 'use strict';
 module.exports = {
   schedule: {
-    cron: '0 40 10 * * *',
+    cron: '0 0 17 * * *',
     type: 'all', // specify all `workers` need to execute
   },
   async task(ctx) {
-    // const res = await ctx.curl('http://www.api.com/cache', {
-    //   dataType: 'json',
-    // });
-    // ctx.app.cache = res.data;
-    ctx.logger.info('date:', new Date().getMinutes());
+    await ctx.service.wx.sendBirthdayNotice();
+    ctx.logger.info('birthday_notice shedule');
   },
 };

@@ -19,6 +19,25 @@ function lunarToSolar(y, m, d) {
 
   return LunarCalendar.lunarToSolar(y, m, d);
 }
+
+function formatTime(s, m, h, d, M, y) {
+  const t = new Date();
+  if (s != null) {
+    t.setSeconds(s);
+  }
+  if (m != null) {
+    t.setMinutes(m);
+  }
+  if (h != null) {
+    t.setHours(h);
+  }
+  if (d != null) {
+    t.setDate(d);
+  }
+  return t;
+}
 module.exports = {
   lunarToSolar,
+  formatTime,
 };
+

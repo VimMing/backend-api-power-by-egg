@@ -26,17 +26,34 @@ class WxService extends Service {
       }
     });
   }
+  async send(requestData, model) {
+    const { host } = this.app.config.passportWeapp;
+    // 获取access_token
+    const tokenJson = await this.getAccessToken();
+    const res = await this.ctx.curl(`${host}/cgi-bin/message/subscribe/send?access_token=${tokenJson.access_token}
+    `, {
+      method: 'POST',
+      contentType: 'json',
+      data: requestData,
+      dataType: 'json',
+    });
+
+    if (res.data.errmsg === 'ok') {
+      await model.update({
+        status: 1,
+        ErrMessage: '========推送成功========',
+      });
+    } else {
+      await model.update({
+        status: 2,
+        ErrMessage: res.data.errmsg,
+      });
+    }
+  }
   async sendBirthdayNotice() {
-    // todo
     const { ctx } = this;
-    const start = new Date();
-    const end = new Date();
-    start.setSeconds(0);
-    start.setMinutes(0);
-    start.setHours(0);
-    end.setSeconds(59);
-    end.setMinutes(59);
-    end.setHours(23);
+    const start = utils.formatTime(0, 0, 0);
+    const end = utils.formatTime(59, 59, 23);
     const WxSubscription = ctx.model.WxSubscription;
     const User = ctx.model.User;
     User.hasMany(WxSubscription);
@@ -49,6 +66,7 @@ class WxService extends Service {
             [Op.gte]: start,
           },
         },
+        status: 0,
       },
       include: ctx.model.User,
     });
@@ -56,7 +74,7 @@ class WxService extends Service {
       for (const i of res) {
         const touser = i.user.openId;
         const template_id = i.templateId;
-        const page = `/pages/index/index?id=${i.content.id}`;
+        const page = `/pages/index/notice?id=${i.content.id}`;
         const d = new Date(i.content.birthday);
         const name = i.content.name;
         let solarBirthday = '';
@@ -66,6 +84,9 @@ class WxService extends Service {
         } else if (d) {
           solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
         }
+        const distance = Math.floor(
+          ((new Date(solarBirthday.year, solarBirthday.month - 1, solarBirthday.day, 23, 59, 59)).getTime() - (new Date()).getTime()) / (24 * 3600 * 1000)
+        );
         const requestData = {
           touser,
           template_id,
@@ -76,49 +97,14 @@ class WxService extends Service {
               value: name,
             },
             thing2: {
-              value: 'xxx',
+              value: `距离他的(${i.content.isLunar ? '农历' : '公历'})生日还有${distance}天`,
             },
           },
         };
-        ctx.logger.info(requestData);
+        await this.send(requestData, i);
       }
     }
     return res;
-    // const requestData = {
-    //   touser: 'oJzdG42QHZDLqDcHbvNs9xu8gMzs',
-    //   template_id: 'E3YdVL8G4BZaFJ9ORfp6-nKtRhB1oyh-HWM8zKJpjj8',
-    //   page: '/pages/index/index',
-    //   data: {
-    //     time1: {
-    //       value: '2019年10月1日',
-    //     },
-    //     thing3: {
-    //       value: '佘慧民',
-    //     },
-    //     thing2: {
-    //       value: 'xxx',
-    //     },
-    //   },
-    // };
-
-    // const { host } = this.app.config.passportWeapp;
-    // // 获取access_token
-    // const tokenJson = await this.getAccessToken();
-    // const res = await this.ctx.curl(`${host}/cgi-bin/message/subscribe/send?access_token=${tokenJson.access_token}
-    // `, {
-    //   method: 'POST',
-    //   contentType: 'json',
-    //   data: requestData,
-    //   dataType: 'json',
-    // });
-
-    // if (res.data.errmsg === 'ok') {
-    //   ctx.logger.info('========推送成功========');
-    //   // TODO
-    // } else {
-    //   ctx.logger.info('========推送失败========', res.data);
-    //   // TODO
-    // }
   }
 }
 

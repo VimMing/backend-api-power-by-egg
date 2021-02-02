@@ -22,11 +22,10 @@ class WxController extends Controller {
     };
   }
 
-  async test() {
+  async sendBirthdayNotice() {
     const { ctx } = this;
     const res = await ctx.service.wx.sendBirthdayNotice();
-    // await this.sendSubscribeMsg();
-    ctx.body = { res };
+    ctx.body = { errCode: 0, data: res };
   }
 }
 
