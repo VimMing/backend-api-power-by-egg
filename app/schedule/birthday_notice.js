@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   schedule: {
-    cron: '0 0 17 * * *',
+    cron: '0 0 0/1 * * *',
     type: 'all', // specify all `workers` need to execute
   },
   async task(ctx) {

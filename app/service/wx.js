@@ -52,8 +52,9 @@ class WxService extends Service {
   }
   async sendBirthdayNotice() {
     const { ctx } = this;
-    const start = utils.formatTime(0, 0, 0);
-    const end = utils.formatTime(59, 59, 23);
+    const now = new Date();
+    const start = utils.formatTime(0, 0, now.getHours());
+    const end = utils.formatTime(59, 59, now.getHours());
     const WxSubscription = ctx.model.WxSubscription;
     const User = ctx.model.User;
     User.hasMany(WxSubscription);
@@ -74,7 +75,7 @@ class WxService extends Service {
       for (const i of res) {
         const touser = i.user.openId;
         const template_id = i.templateId;
-        const page = `/pages/index/notice?id=${i.content.id}`;
+        const page = `/pages/index/detail?id=${i.content.id}`;
         const d = new Date(i.content.birthday);
         const name = i.content.name;
         let solarBirthday = '';

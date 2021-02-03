@@ -19,6 +19,10 @@ module.exports = app => {
       type: STRING,
       field: 'template_id',
     },
+    eventId: {
+      type: INTEGER,
+      field: 'event_id',
+    },
     ErrMessage: {
       type: STRING,
       field: 'err_message',
