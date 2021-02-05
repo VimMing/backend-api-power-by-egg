@@ -9,3 +9,5 @@ module.exports = {
     ctx.logger.info('birthday_notice shedule');
   },
 };
+
+// error [HPE_INVALID_METHOD] occurred: Parse Error: Invalid method encountered
