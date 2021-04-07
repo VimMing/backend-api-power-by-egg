@@ -1,5 +1,5 @@
 'use strict';
-
+const crypto = require('crypto');
 const Service = require('egg').Service;
 class UserService extends Service {
   async find(query) {
@@ -26,6 +26,19 @@ class UserService extends Service {
     const res = await mysql.insert('user', { name, birthday, is_lunar: isLunar });
     await mysql.insert('my_friend', { my_id: user.id, friend_id: res.insertId });
     return await this.app.mysql.get('user', { id: res.insertId });
+  }
+  async validatorUser(user) {
+    const { ctx } = this;
+    const u = await ctx.model.User.findOne({ where: { mobile: user.username } });
+    if (u) {
+      const pwd = await crypto.createHash('md5').update(user.password + '').digest('hex');
+      // ctx.logger.info('verify %s %s', u.password, pwd);
+      return u.password === pwd ? u : false;
+    }
+    throw ({
+      message: '手机号不存在',
+    });
+
   }
 }
 
