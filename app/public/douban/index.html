@@ -6,6 +6,36 @@
     <meta name="referrer" content="never">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>豆瓣日历-仅供学习</title>
+    <style>
+        .btn {
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #dcdfe6;
+            color: #606266;
+            -webkit-appearance: none;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            margin: 0;
+            transition: .1s;
+            font-weight: 500;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #67c23a;
+            border-color: #67c23a;
+            border-radius: 20px;
+            padding: 12px 23px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,8 +43,22 @@
     justify-content: center;">
         <canvas id="canvas" style="width: 414px; height: 600px; margin: 20px auto;"></canvas>
     </div>
+    <!-- <div style="    display: flex;
+    justify-content: center;"> <div class="btn" onclick="helloworld()">下载</div></div> -->
+    <div style="width: 500px;left: 50%; transform: translateX(-50%);text-align: center; position: fixed; bottom: 10px;">
+        备案/许可证编号为：湘ICP备2021000431号</div>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script>
+        function helloworld(){
+            var canvas = document.getElementById('canvas');
+            var tempSrc = canvas.toDataURL();
+            var a = document.createElement('a');
+            a.src=tempSrc;
+            a.download="图片.png";
+            a.innerText = "afda";
+            a.click();
+            document.body.appendChild(a);
+        }
         /**
  * Binary search splits to find a line break point
  * @param {*} text 
@@ -69,7 +113,7 @@
 
             return result;
         }
-        axios.get("http://birthday.codehub.store//api/movie/one").then(({ data: { data } }) => {
+        axios.get("https://birthday.codehub.store/api/movie/one").then(({ data: { data } }) => {
             console.log(data)
             var canvas = document.getElementById('canvas');
             const canvasWidth = canvas.width = 818;
@@ -90,6 +134,7 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             var img = new Image();
+            // img.setAttribute("crossOrigin",'anonymous')
             img.src = data.comment.poster;
             img.onload = (d) => {
                 console.log(d)
