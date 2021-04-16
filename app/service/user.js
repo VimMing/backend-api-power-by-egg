@@ -6,6 +6,14 @@ class UserService extends Service {
     const user = await this.app.mysql.get('user', query);
     return user;
   }
+  async list({ page = 1, limit = 20 }) {
+    const { ctx } = this;
+    const list = await ctx.model.User.findAll({
+      limit: 10,
+      offset: (page - 1) * limit,
+    });
+    return list;
+  }
   async getMyFriends(uid) {
     const mysql = this.app.mysql;
     const user = await mysql.get('user', { id: uid });
@@ -38,7 +46,6 @@ class UserService extends Service {
     throw ({
       message: '手机号不存在',
     });
-
   }
 }
 

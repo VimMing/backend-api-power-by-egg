@@ -25,6 +25,7 @@ module.exports = app => {
 
   router.get('/api/auth/create-token', controller.auth.createToken);
   router.get('/api/auth/oauth2', isAdmin, controller.auth.oauth2);
+  router.post('/api/admin/user-list', isAdmin, controller.admin.user.list);
 
   router.get('/api/movie/one', controller.movie.getOne);
 };
