@@ -9,10 +9,11 @@ class UserService extends Service {
   async list({ page = 1, limit = 20 }) {
     const { ctx } = this;
     const list = await ctx.model.User.findAll({
-      limit: 10,
+      limit,
       offset: (page - 1) * limit,
     });
-    return list;
+    const amount = await ctx.model.User.count();
+    return { list, amount };
   }
   async getMyFriends(uid) {
     const mysql = this.app.mysql;

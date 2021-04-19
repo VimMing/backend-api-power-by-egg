@@ -28,4 +28,5 @@ module.exports = app => {
   router.post('/api/admin/user-list', isAdmin, controller.admin.user.list);
 
   router.get('/api/movie/one', controller.movie.getOne);
+  router.get('/api/admin/movie/getTodayPic', isAdmin, controller.admin.movie.getTodayPic);
 };

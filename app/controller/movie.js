@@ -3,13 +3,7 @@ const Controller = require('egg').Controller;
 
 class MovieController extends Controller {
   async getOne() {
-    const { ctx } = this;
-    const res = await ctx.model.Movie.findOne({
-      where: {
-        uid: Math.ceil(Math.random() * 350) + '',
-      },
-    });
-    ctx.body = { errCode: 0, data: res };
+    return { errCode: 0, data: await this.service.movie.getOne() };
   }
 }
 
