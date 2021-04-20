@@ -21,7 +21,6 @@ function findBreakPoint(text, width, context) {
   return -1;
 }
 
-
 function breakLinesForCanvas(context, text, width, font) {
 
   const result = [];
@@ -83,17 +82,17 @@ class UserService extends Service {
       const today = new Date();
       ctx.fillStyle = 'rgba(0, 0, 0, 1)';
       ctx.fillStyle = '#' + data.comment.color_scheme.primary_color_dark;
-      ctx.font = 'bold 30px ';
+      ctx.font = 'bold 30px "sans-serif" " Microsoft Yahei"';
       ctx.textAlign = 'left';
       ctx.fillText(`《${data.title}》(${data.year})`, paddingLeft, 80);
-      ctx.font = '20px ';
+      ctx.font = '20px Microsoft Yahei';
       ctx.fillText(`豆瓣评分 ${data.rating.value.toFixed(1)}`, paddingLeft + 20, 120);
       ctx.fillText(`${subArr[1].trim()} ${data.genres.join('/')}`, paddingLeft + 20, 150);
       ctx.fillText(`${subArr[subArr.length - 1].trim()}`, paddingLeft + 20, 180);
-      ctx.font = '400 120px ';
+      ctx.font = '400 120px "sans-serif" " Microsoft Yahei"';
       ctx.textAlign = 'right';
       ctx.fillText(`${('0' + today.getDate()).slice(-2)}`, canvasWidth - paddingLeft * 2.5, 160);
-      ctx.font = '20px ';
+      ctx.font = '20px Microsoft Yahei';
       ctx.fillText(`${('0' + (today.getMonth() + 1)).slice(-2)}月${('0' + today.getDate()).slice(-2)}日`, canvasWidth - paddingLeft * 1, 110);
       ctx.fillText(`${week_day_dict[today.getDay()]}`, canvasWidth - paddingLeft * 1, 140);
 
@@ -102,9 +101,9 @@ class UserService extends Service {
       const contentHeight = 800;
       const lineHeight = 40;
       ctx.fillStyle = '#' + data.comment.color_scheme.primary_color_dark;
-      ctx.font = '20px ';
+      ctx.font = '20px Microsoft Yahei';
       ctx.textAlign = 'left';
-      const resultLines = breakLinesForCanvas(ctx, '"' + data.comment.content + '"', canvasWidth - 100, '24px ');
+      const resultLines = breakLinesForCanvas(ctx, '"' + data.comment.content + '"', canvasWidth - 100, '24px Microsoft Yahei');
       resultLines.forEach(function(line, index) {
         ctx.fillText(line, paddingLeft, contentHeight + lineHeight * index);
       });
