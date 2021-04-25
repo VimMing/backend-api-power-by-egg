@@ -14,10 +14,13 @@ module.exports = app => {
   router.get('/api/user/wxapp-login-by-code', controller.user.wxappLoginBycode);
   router.get('/api/user/my-friends', controller.user.myfriends);
   router.get('/api/user/jwt/my-friends', app.jwt, controller.user.myfriendsByJwt);
+  router.post('/api/user/updateUserInfo', app.jwt, jwt2auth, controller.user.updateUserInfo);
   router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
+
   router.post('/api/wx/addBirthdayNotice', app.jwt, jwt2auth, controller.wx.addBirthdayNotice);
   router.get('/api/wx/sendBirthdayNotice', app.jwt, jwt2auth, controller.wx.sendBirthdayNotice);
   router.post('/api/wx/birthdayNotice/list', app.jwt, jwt2auth, controller.wx.list);
+
   router.get('/api/user/getFriendByShareCode', controller.user.getFriendByShareCode);
   router.get('/api/user/deleteFriendByJwt', app.jwt, controller.user.destoryByJwt);
   router.get('/api/user/addFriendByOtherManShareByJwt', app.jwt, controller.user.addFriendByOtherManShareByJwt);

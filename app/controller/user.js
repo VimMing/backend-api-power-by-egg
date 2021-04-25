@@ -77,6 +77,27 @@ class UserController extends Controller {
     }
   }
 
+  // /user/updateUserInfo
+  async updateUserInfo() {
+    const { ctx } = this;
+    ctx.validate({ avatarUrl: 'string', nickName: 'string' });
+    const user = await ctx.model.User.findByPk(ctx.user.id);
+    const { nickName, avatarUrl } = ctx.request.body;
+    if (user) {
+      await user.update({
+        nickname: nickName,
+        avatarUrl,
+      });
+      ctx.body = {
+        errCode: 0,
+      };
+    } else {
+      ctx.body = {
+        errCode: 1,
+      };
+    }
+
+  }
   async create() {
     // 新增用户
     const { ctx } = this;

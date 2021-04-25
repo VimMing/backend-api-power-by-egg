@@ -15,9 +15,14 @@ module.exports = app => {
       type: DATE,
       field: 'created_at',
     },
+    nickname: STRING,
     updatedAt: {
       type: DATE,
       field: 'updated_at',
+    },
+    avatarUrl: {
+      type: STRING,
+      field: 'avatar_url',
     },
     isAdmin: {
       type: BOOLEAN,
