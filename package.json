@@ -33,6 +33,7 @@
     "eslint": "^5.13.0",
     "eslint-config-egg": "^7.1.0",
     "git-cz": "^4.7.6",
+    "prettier": "2.6.2",
     "sequelize-cli": "^6.2.0"
   },
   "engines": {

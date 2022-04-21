@@ -6,7 +6,17 @@ const nanoid = require('nanoid');
 
 function lunarToSolar(y, m, d) {
   //
-  const map = { 2020: 4, 2023: 2, 2025: 6, 2028: 5, 2031: 3, 2033: 11, 2036: 6, 2039: 5, 2042: 2 };
+  const map = {
+    2020: 4,
+    2023: 2,
+    2025: 6,
+    2028: 5,
+    2031: 3,
+    2033: 11,
+    2036: 6,
+    2039: 5,
+    2042: 2,
+  };
   // eslint-disable-next-line prefer-const
   let ly = y - 1,
     lm = m;
@@ -27,11 +37,15 @@ class UserController extends Controller {
   async createToken() {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {
-      const token = this.app.jwt.sign({
-        ...ctx.user,
-      }, this.app.config.jwt.secret, {
-        expiresIn: '2h',
-      });
+      const token = this.app.jwt.sign(
+        {
+          ...ctx.user,
+        },
+        this.app.config.jwt.secret,
+        {
+          expiresIn: '2h',
+        }
+      );
       ctx.body = {
         data: 'Bearer ' + token,
         errcode: 0,
@@ -45,10 +59,10 @@ class UserController extends Controller {
     const { ctx } = this;
     const id = ctx.query.id;
     if (!id) {
-      throw ({
+      throw {
         message: 'id参数缺失',
         status: 400,
-      });
+      };
     }
     if (ctx.isAuthenticated()) {
       const friend = await ctx.model.MyFriend.findOne({
@@ -81,7 +95,12 @@ class UserController extends Controller {
     // 新增用户
     const { ctx } = this;
     if (ctx.isAuthenticated()) {
-      ctx.validate({ name: 'string', birthday: 'date', isLunar: 'boolean', zodiac: 'int' });
+      ctx.validate({
+        name: 'string',
+        birthday: 'date',
+        isLunar: 'boolean',
+        zodiac: 'int',
+      });
       const { id, name, birthday, isLunar, zodiac } = ctx.request.body;
       let friend = {};
       if (id) {
@@ -138,12 +157,20 @@ class UserController extends Controller {
     if (friend) {
       i = friend.get();
       const d = i.birthday;
+      const today = new Date();
       if (i.isLunar) {
-        const today = new Date();
-        i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+        i.solarBirthday = lunarToSolar(
+          today.getFullYear(),
+          d.getMonth() + 1,
+          d.getDate()
+        );
         // ctx.logger.info(typeof i.birthday.getFullYear());
       } else {
-        i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+        i.solarBirthday = {
+          year: today.getFullYear(),
+          month: d.getMonth() + 1,
+          day: d.getDate(),
+        };
       }
     }
     ctx.body = {
@@ -165,19 +192,19 @@ class UserController extends Controller {
         code: 1,
         errMessage: 'id参数缺失',
       };
-      throw ({
+      throw {
         message: 'id参数缺失',
         status: 200,
-      });
+      };
     }
     if (ctx.isAuthenticated()) {
       const friend = await ctx.model.MyFriend.findByPk(id);
       // ctx.logger.info('friend', friend);
       if (!friend) {
-        throw ({
+        throw {
           message: '记录不存在',
           status: 200,
-        });
+        };
       }
       if (friend && +friend.userId !== +ctx.user.id) {
         const res = await ctx.model.MyFriend.create({
@@ -212,7 +239,9 @@ class UserController extends Controller {
     const { key, secret } = app.config.passportWeapp;
     const code = ctx.query.code;
     const url = 'https://api.weixin.qq.com/sns/jscode2session';
-    const result = await ctx.curl(`${url}?appid=${key}&secret=${secret}&js_code=${code}&grant_type=authorization_code`);
+    const result = await ctx.curl(
+      `${url}?appid=${key}&secret=${secret}&js_code=${code}&grant_type=authorization_code`
+    );
     ctx.status = result.status;
     const data = JSON.parse(Buffer.from(result.data).toString());
     // ctx.logger.info(result);
@@ -232,7 +261,7 @@ class UserController extends Controller {
         // user = await ctx.service.user.register({
         //   open_id: data.openid,
         // });
-        user = (await ctx.model.User.create({ openId: data.openid }));
+        user = await ctx.model.User.create({ openId: data.openid });
         // ctx.logger.info('user:', user, data.openid);
       }
       await ctx.login(user.dataValues);
@@ -270,12 +299,21 @@ class UserController extends Controller {
           }
           i = i.get();
           const d = i.birthday;
+          const today = new Date();
           if (i.isLunar) {
-            const today = new Date();
-            i.solarBirthday = lunarToSolar(today.getFullYear(), d.getMonth() + 1, d.getDate());
+            
+            i.solarBirthday = lunarToSolar(
+              today.getFullYear(),
+              d.getMonth() + 1,
+              d.getDate()
+            );
             // ctx.logger.info(typeof i.birthday.getFullYear());
           } else {
-            i.solarBirthday = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+            i.solarBirthday = {
+              year: today.getFullYear(),
+              month: d.getMonth() + 1,
+              day: d.getDate(),
+            };
           }
           return i;
         });

@@ -16,3 +16,4 @@ config/config.local.js
 config/config.test.js
 database/config.local.json
 config/env
+app/public
