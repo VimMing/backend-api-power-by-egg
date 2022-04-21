@@ -18,14 +18,23 @@ module.exports = app => {
   // Process user information
   app.passport.verify(async (ctx, user) => {
     app.logger.info('verify', user);
-    return user;
+    const u = await ctx.service.user.validatorUser(user);
+    if (u) {
+      return u;
+    }
+    ctx.logout();
+    throw ({
+      message: '密码或手机错误',
+      status: 401,
+    });
   });
   app.passport.serializeUser(async (ctx, user) => {
-    // app.logger.info('serializeUser', user);
+    app.logger.info('serializeUser', user);
     return user;
   });
   app.passport.deserializeUser(async (ctx, user) => {
-    // app.logger.info('deserializeUser', user);
+    app.logger.info('deserializeUser', user);
+    user = await ctx.model.User.findByPk(user.id);
     return user;
   });
 

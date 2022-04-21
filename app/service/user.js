@@ -1,10 +1,19 @@
 'use strict';
-
+const crypto = require('crypto');
 const Service = require('egg').Service;
 class UserService extends Service {
   async find(query) {
     const user = await this.app.mysql.get('user', query);
     return user;
+  }
+  async list({ page = 1, limit = 20 }) {
+    const { ctx } = this;
+    const list = await ctx.model.User.findAll({
+      limit,
+      offset: (page - 1) * limit,
+    });
+    const amount = await ctx.model.User.count();
+    return { list, amount };
   }
   async getMyFriends(uid) {
     const mysql = this.app.mysql;
@@ -26,6 +35,18 @@ class UserService extends Service {
     const res = await mysql.insert('user', { name, birthday, is_lunar: isLunar });
     await mysql.insert('my_friend', { my_id: user.id, friend_id: res.insertId });
     return await this.app.mysql.get('user', { id: res.insertId });
+  }
+  async validatorUser(user) {
+    const { ctx } = this;
+    const u = await ctx.model.User.findOne({ where: { mobile: user.username } });
+    if (u) {
+      const pwd = await crypto.createHash('md5').update(user.password + '').digest('hex');
+      // ctx.logger.info('verify %s %s', u.password, pwd);
+      return u.password === pwd ? u : false;
+    }
+    throw ({
+      message: '手机号不存在',
+    });
   }
 }
 

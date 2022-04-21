@@ -75,7 +75,7 @@ class WxService extends Service {
       for (const i of res) {
         const touser = i.user.openId;
         const template_id = i.templateId;
-        const page = `/pages/index/detail?id=${i.content.id}`;
+        const page = `/pages/index/detail?shareCode=${i.content.shareCode}`;
         const d = new Date(i.content.birthday);
         const name = i.content.name;
         let solarBirthday = '';

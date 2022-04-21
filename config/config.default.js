@@ -46,6 +46,12 @@ module.exports = appInfo => {
     match: '/api',
   };
 
+  config.cors = {
+    origin: '*', // 注释掉，因为不支持cookie
+    credentials: true, // 允许跨域请求携带cookies
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+  };
+
   config.security = {
     csrf: {
       ignore: '/api',
