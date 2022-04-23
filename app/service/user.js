@@ -1,4 +1,4 @@
-'use strict';
+
 const crypto = require('crypto');
 const Service = require('egg').Service;
 class UserService extends Service {

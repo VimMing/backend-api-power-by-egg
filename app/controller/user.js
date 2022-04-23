@@ -1,38 +1,9 @@
-'use strict';
-
 const Controller = require('egg').Controller;
-const LunarCalendar = require('lunar-calendar');
-const nanoid = require('nanoid');
-
-function lunarToSolar(y, m, d) {
-  //
-  const map = {
-    2020: 4,
-    2023: 2,
-    2025: 6,
-    2028: 5,
-    2031: 3,
-    2033: 11,
-    2036: 6,
-    2039: 5,
-    2042: 2,
-  };
-  // eslint-disable-next-line prefer-const
-  let ly = y - 1,
-    lm = m;
-  if (map[ly] && map[ly] < lm) {
-    lm = lm + 1;
-  }
-  if (map[y] && map[y] < m) {
-    m = m + 1;
-  }
-  const l_s = LunarCalendar.lunarToSolar(ly, lm, d);
-  if (parseInt(l_s.year) === parseInt(y)) {
-    return l_s;
-  }
-
-  return LunarCalendar.lunarToSolar(y, m, d);
-}
+// const LunarCalendar = require('lunar-calendar');
+// const nanoid = require('nanoid');
+import { nanoid } from 'nanoid';
+// import LunarCalendar from 'lunar-calendar';
+import { lunarToSolar } from '../utils';
 class UserController extends Controller {
   async createToken() {
     const { ctx } = this;
@@ -110,7 +81,6 @@ class UserController extends Controller {
         errCode: 1,
       };
     }
-
   }
   async create() {
     // 新增用户
@@ -234,7 +204,7 @@ class UserController extends Controller {
           birthday: friend.birthday,
           isLunar: friend.isLunar,
           zodiac: friend.zodiac,
-          shareCode: nanoid.nanoid(),
+          shareCode: nanoid(),
         });
         ctx.body = {
           data: res,
@@ -312,23 +282,21 @@ class UserController extends Controller {
       // ctx.logger.info('user: hello world', friends);
       if (friends) {
         // ctx.logger.info(friends);
-        data = friends.map(i => {
+        data = friends.map((i) => {
           if (!i.shareCode) {
             i.update({
-              shareCode: nanoid.nanoid(),
+              shareCode: nanoid(),
             });
           }
           i = i.get();
           const d = i.birthday;
           const today = new Date();
           if (i.isLunar) {
-            
             i.solarBirthday = lunarToSolar(
               today.getFullYear(),
               d.getMonth() + 1,
               d.getDate()
             );
-            // ctx.logger.info(typeof i.birthday.getFullYear());
           } else {
             i.solarBirthday = {
               year: today.getFullYear(),

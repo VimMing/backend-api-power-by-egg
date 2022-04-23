@@ -1,13 +1,15 @@
-'use strict';
-function findBreakPoint(text, width, context) {
+/* eslint-disable @typescript-eslint/no-var-requires */
 
+function findBreakPoint(text, width, context) {
   let min = 0;
   let max = text.length - 1;
 
   while (min <= max) {
     const middle = Math.floor((min + max) / 2);
     const middleWidth = context.measureText(text.substr(0, middle)).width;
-    const oneCharWiderThanMiddleWidth = context.measureText(text.substr(0, middle + 1)).width;
+    const oneCharWiderThanMiddleWidth = context.measureText(
+      text.substr(0, middle + 1)
+    ).width;
     if (middleWidth <= width && oneCharWiderThanMiddleWidth > width) {
       return middle;
     }
@@ -22,7 +24,6 @@ function findBreakPoint(text, width, context) {
 }
 
 function breakLinesForCanvas(context, text, width, font) {
-
   const result = [];
   let breakPoint = 0;
 
@@ -77,7 +78,7 @@ class UserService extends Service {
     // Fill background
     ctx.fillStyle = 'rgba(250, 250, 250, 1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    await loadImage(data.comment.poster).then(img => {
+    await loadImage(data.comment.poster).then((img) => {
       const subArr = data.cardSubtitle.replace('\n', '/').split('/');
       const today = new Date();
       ctx.fillStyle = 'rgba(0, 0, 0, 1)';
@@ -86,15 +87,41 @@ class UserService extends Service {
       ctx.textAlign = 'left';
       ctx.fillText(`《${data.title}》(${data.year})`, paddingLeft, 80);
       ctx.font = '20px Microsoft Yahei';
-      ctx.fillText(`豆瓣评分 ${data.rating.value.toFixed(1)}`, paddingLeft + 20, 120);
-      ctx.fillText(`${subArr[1].trim()} ${data.genres.join('/')}`, paddingLeft + 20, 150);
-      ctx.fillText(`${subArr[subArr.length - 1].trim()}`, paddingLeft + 20, 180);
+      ctx.fillText(
+        `豆瓣评分 ${data.rating.value.toFixed(1)}`,
+        paddingLeft + 20,
+        120
+      );
+      ctx.fillText(
+        `${subArr[1].trim()} ${data.genres.join('/')}`,
+        paddingLeft + 20,
+        150
+      );
+      ctx.fillText(
+        `${subArr[subArr.length - 1].trim()}`,
+        paddingLeft + 20,
+        180
+      );
       ctx.font = '400 120px "sans-serif" " Microsoft Yahei"';
       ctx.textAlign = 'right';
-      ctx.fillText(`${('0' + today.getDate()).slice(-2)}`, canvasWidth - paddingLeft * 2.5, 160);
+      ctx.fillText(
+        `${('0' + today.getDate()).slice(-2)}`,
+        canvasWidth - paddingLeft * 2.5,
+        160
+      );
       ctx.font = '20px Microsoft Yahei';
-      ctx.fillText(`${('0' + (today.getMonth() + 1)).slice(-2)}月${('0' + today.getDate()).slice(-2)}日`, canvasWidth - paddingLeft * 1, 110);
-      ctx.fillText(`${week_day_dict[today.getDay()]}`, canvasWidth - paddingLeft * 1, 140);
+      ctx.fillText(
+        `${('0' + (today.getMonth() + 1)).slice(-2)}月${(
+          '0' + today.getDate()
+        ).slice(-2)}日`,
+        canvasWidth - paddingLeft * 1,
+        110
+      );
+      ctx.fillText(
+        `${week_day_dict[today.getDay()]}`,
+        canvasWidth - paddingLeft * 1,
+        140
+      );
 
       ctx.drawImage(img, 0, 220, canvasWidth, 459);
 
@@ -103,17 +130,28 @@ class UserService extends Service {
       ctx.fillStyle = '#' + data.comment.color_scheme.primary_color_dark;
       ctx.font = '20px Microsoft Yahei';
       ctx.textAlign = 'left';
-      const resultLines = breakLinesForCanvas(ctx, '"' + data.comment.content + '"', canvasWidth - 100, '24px Microsoft Yahei');
-      resultLines.forEach(function(line, index) {
+      const resultLines = breakLinesForCanvas(
+        ctx,
+        '"' + data.comment.content + '"',
+        canvasWidth - 100,
+        '24px Microsoft Yahei'
+      );
+      resultLines.forEach(function (line, index) {
         ctx.fillText(line, paddingLeft, contentHeight + lineHeight * index);
       });
       ctx.textAlign = 'right';
-      ctx.fillText('-豆瓣用户', canvasWidth - paddingLeft, contentHeight + lineHeight * (resultLines.length + 1));
+      ctx.fillText(
+        '-豆瓣用户',
+        canvasWidth - paddingLeft,
+        contentHeight + lineHeight * (resultLines.length + 1)
+      );
       const stream = canvas.createPNGStream();
-      const out = fs.createWriteStream(path.resolve('./app/public/douban', 'today.png'));
+      const out = fs.createWriteStream(
+        path.resolve('./app/public/douban', 'today.png')
+      );
       stream.pipe(out);
       out.on('finish', () => console.log('The PNG file was created.'));
-      out.on('error', err => console.log('create write stream error!', err));
+      out.on('error', (err) => console.log('create write stream error!', err));
     });
     this.ctx.body = { errCode: 0 };
   }

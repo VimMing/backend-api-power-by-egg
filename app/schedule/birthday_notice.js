@@ -1,4 +1,4 @@
-'use strict';
+
 module.exports = {
   schedule: {
     cron: '0 0 0/1 * * *',
