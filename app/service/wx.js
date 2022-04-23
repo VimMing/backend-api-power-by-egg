@@ -1,7 +1,7 @@
 const Service = require('egg').Service;
 const { Op } = require('sequelize');
 // const utils = require('../utils.ts');
-import { lunarToSolar, formatTime } from '../utils';
+const { lunarToSolar, formatTime } = require('../utils');
 class WxService extends Service {
   async getAccessToken() {
     const {
