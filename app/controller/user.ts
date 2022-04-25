@@ -1,10 +1,7 @@
-const Controller = require('egg').Controller;
-// const LunarCalendar = require('lunar-calendar');
-// const nanoid = require('nanoid');
 import { nanoid } from 'nanoid';
-// import LunarCalendar from 'lunar-calendar';
 import { lunarToSolar } from '../utils';
-class UserController extends Controller {
+import BaseController from './base';
+class UserController extends BaseController {
   async createToken() {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {
@@ -19,7 +16,7 @@ class UserController extends Controller {
       );
       ctx.body = {
         data: 'Bearer ' + token,
-        errcode: 0,
+        errCode: 0,
       };
     } else {
       ctx.throw(401, '没通过权限校验', { data: null });
@@ -93,20 +90,18 @@ class UserController extends Controller {
         zodiac: 'int',
       });
       const { id, name, birthday, isLunar, zodiac } = ctx.request.body;
-      let friend: typeof ctx.model.MyFriend = {};
+      let friend: any = {};
       if (id) {
-        // friend = await ctx.model.MyFriend.create({ });
         friend = await ctx.model.MyFriend.findByPk(parseInt(id));
         if (friend && friend.userId === ctx.user.id) {
           await friend.update({ name, birthday, isLunar, zodiac });
         } else {
           ctx.body = {
-            errcode: 1,
-            errMessage: 'id有误',
+            errCode: 1,
+            errMsg: 'id有误',
           };
         }
       } else {
-        // ctx.logger.info('user:', ctx.user);
         friend = await ctx.model.MyFriend.create({
           name,
           birthday,
@@ -166,7 +161,7 @@ class UserController extends Controller {
     }
     ctx.body = {
       data: i || friend,
-      errcode: 0,
+      errCode: 0,
     };
   }
 
@@ -180,8 +175,8 @@ class UserController extends Controller {
     const ctx = this.ctx;
     if (!id) {
       ctx.body = {
-        code: 1,
-        errMessage: 'id参数缺失',
+        errCode: 1,
+        errMsg: 'id参数缺失',
       };
       throw {
         message: 'id参数缺失',
@@ -208,19 +203,19 @@ class UserController extends Controller {
         });
         ctx.body = {
           data: res,
-          errcode: 0,
+          errCode: 0,
         };
       } else {
         ctx.body = {
-          errcode: 1,
-          errMessage: '她/他已经是你的朋友了',
+          errCode: 1,
+          errMsg: '她/他已经是你的朋友了',
         };
       }
     } else {
       ctx.status = 401;
       ctx.body = {
-        code: 1,
-        errMessage: '权限校验失败',
+        errCode: 1,
+        errMsg: '权限校验失败',
       };
     }
   }
@@ -236,7 +231,7 @@ class UserController extends Controller {
     ctx.status = result.status;
     const data = JSON.parse(Buffer.from(result.data).toString());
     // ctx.logger.info(result);
-    if (data.errcode) {
+    if (data.errCode) {
       ctx.body = data;
     } else {
       // let user = await ctx.service.user.find({
@@ -278,11 +273,11 @@ class UserController extends Controller {
           userId: ctx.user.id,
         },
       });
-      let data = [];
+      let data = [] as typeof friends;
       // ctx.logger.info('user: hello world', friends);
       if (friends) {
         // ctx.logger.info(friends);
-        data = friends.map((i) => {
+        data = friends.map((i: any) => {
           if (!i.shareCode) {
             i.update({
               shareCode: nanoid(),
@@ -308,7 +303,7 @@ class UserController extends Controller {
         });
       }
       ctx.body = {
-        errcode: 0,
+        errCode: 0,
         data,
       };
     } else {

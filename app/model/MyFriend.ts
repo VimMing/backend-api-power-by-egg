@@ -1,17 +1,19 @@
-import { Instance } from 'sequelize';
+import { Instance, Model } from 'sequelize';
 
 interface MyFriend {
-  id: number;
+  id?: number;
   userId: number;
   name: string;
   birthday: Date;
   isLunar: boolean;
   zodiac: number;
-  shareCode: string;
-  createdAt: Date;
-  updatedAt: Date;
+  shareCode?: string;
+  solarBirthday?: { year: number; month: number; day: number };
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-export default (app): Instance<MyFriend>['Model'] => {
+// Instance<MyFriend>['Model']
+export default (app): Model<MyFriend & Instance<MyFriend>, MyFriend> => {
   const { STRING, INTEGER, DATE, BOOLEAN } = app.Sequelize;
 
   const MyFriend = app.model.define(
