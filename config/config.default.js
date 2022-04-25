@@ -1,38 +1,44 @@
 /* eslint valid-jsdoc: "off" */
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const path = require('path');
 
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
-module.exports = appInfo => {
+module.exports = (appInfo) => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
    **/
-  const config = exports = {
-    mysql: {
-      client: {
-        host: '127.0.0.1',
-        port: '63306',
-        user: 'vimming',
-        password: 'mysql123',
-        database: 'test',
-      },
-    },
-    sequelize: {
-      dialect: 'mysql',
-      host: '127.0.0.1',
-      port: 63306,
-      database: 'test',
-      password: 'mysql123',
-    },
+  const config = (exports = {
+    // mysql: {
+    //   client: {
+    //     host: '127.0.0.1',
+    //     port: '63306',
+    //     user: 'vimming',
+    //     password: 'mysql123',
+    //     database: 'test',
+    //   },
+    // },
+    // sequelize: {
+    //   dialect: 'mysql',
+    //   host: '127.0.0.1',
+    //   port: 63306,
+    //   database: 'test',
+    //   password: 'mysql123',
+    // },
+  });
+
+  // 设置日志目录
+  config.logger = {
+    dir: path.join(appInfo.baseDir, 'logs', appInfo.name),
   };
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1602841184197_8076';
 
   // add your middleware config here
-  config.middleware = [ 'errorHandler' ];
+  config.middleware = ['errorHandler'];
   exports.passportLocal = {
     usernameField: 'username',
     passwordField: 'password',

@@ -93,7 +93,7 @@ class UserController extends Controller {
         zodiac: 'int',
       });
       const { id, name, birthday, isLunar, zodiac } = ctx.request.body;
-      let friend = {};
+      let friend: typeof ctx.model.MyFriend = {};
       if (id) {
         // friend = await ctx.model.MyFriend.create({ });
         friend = await ctx.model.MyFriend.findByPk(parseInt(id));
@@ -139,12 +139,12 @@ class UserController extends Controller {
 
   async getFriendByShareCode() {
     const ctx = this.ctx;
-    const friend = await ctx.model.MyFriend.findOne({
+    const friend = await (ctx.model as Egg.IModel).MyFriend.findOne({
       where: {
         shareCode: ctx.query.shareCode,
       },
     });
-    let i = null;
+    let i: any = null;
     if (friend) {
       i = friend.get();
       const d = i.birthday;

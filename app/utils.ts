@@ -1,7 +1,7 @@
-const LunarCalendar = require('lunar-calendar');
+// const LunarCalendar = require('lunar-calendar');
 // console.log(lunarToSolar);
-// import LunarCalendar from 'lunar-calendar';
-function lunarToSolar(
+import LunarCalendar from 'lunar-calendar';
+export function lunarToSolar(
   y: number,
   m: number,
   d: number
@@ -35,7 +35,7 @@ function lunarToSolar(
   return LunarCalendar.lunarToSolar(y, m, d);
 }
 
-function formatTime(
+export function formatTime(
   s: number,
   m: number,
   h: number,

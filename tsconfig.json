@@ -22,8 +22,9 @@
     "inlineSourceMap": true,
     "importHelpers": true,
     "baseUrl": ".", // 一定要设置，项目的路径
-    "paths": { // 这里配置相应的别名
-      "@/*": ["./app/*"],
+    "paths": {
+      // 这里配置相应的别名
+      "@/*": ["./app/*"]
     }
   },
   "exclude": [
@@ -31,6 +32,9 @@
     "app/views",
     "node_modules*",
     "subModules*",
+    "typings/**/*",
+    "database/**/*",
+    "config/**/*",
     "test*"
   ]
 }
