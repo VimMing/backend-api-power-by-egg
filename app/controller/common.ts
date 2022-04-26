@@ -1,6 +1,5 @@
 const Controller = require('egg').Controller;
 import { lunarToSolar } from '../utils';
-
 class CommonController extends Controller {
   async lunarToSolar() {
     const { ctx } = this;

@@ -169,7 +169,6 @@ class UserController extends BaseController {
     await this.jwtToOauth();
     await this.addFriendByOtherManShare();
   }
-
   async addFriendByOtherManShare() {
     const id = this.ctx.query.id;
     const ctx = this.ctx;
