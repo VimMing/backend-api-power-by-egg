@@ -1,16 +1,20 @@
-
-
 const Controller = require('egg').Controller;
 
 class AuthController extends Controller {
   async createToken() {
     const { ctx } = this;
+    ctx.logger.info();
     if (ctx.isAuthenticated()) {
-      const token = this.app.jwt.sign({
-        ...ctx.user,
-      }, this.app.config.jwt.secret, {
-        expiresIn: '2h',
-      });
+      ctx.logger.info(ctx.user);
+      const token = this.app.jwt.sign(
+        {
+          ...ctx.user,
+        },
+        this.app.config.jwt.secret,
+        {
+          expiresIn: '2h',
+        }
+      );
       ctx.body = {
         data: 'Bearer ' + token,
         errcode: 0,

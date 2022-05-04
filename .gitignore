@@ -14,6 +14,7 @@ typings/
 .nyc_output/
 config/config.local.js
 config/config.test.js
+config/config.dev.js
 database/config.local.json
 config/env
 app/public

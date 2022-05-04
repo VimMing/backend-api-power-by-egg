@@ -1,40 +1,46 @@
 /* eslint-disable strict */
 const LocalStrategy = require('passport-local').Strategy;
-module.exports = app => {
+module.exports = (app) => {
   // Mount strategy
-  app.passport.use(new LocalStrategy({
-    passReqToCallback: true,
-  }, (req, username, password, done) => {
-    // format user
-    const user = {
-      provider: 'local',
-      username,
-      password,
-    };
-    app.logger.info('%s %s get user: %j', req.method, req.url, user);
-    app.passport.doVerify(req, user, done);
-  }));
+  app.passport.use(
+    new LocalStrategy(
+      {
+        passReqToCallback: true,
+      },
+      (req, username, password, done) => {
+        // format user
+        const user = {
+          provider: 'local',
+          username,
+          password,
+        };
+        app.logger.info('%s %s get user: %j', req.method, req.url, user);
+        app.passport.doVerify(req, user, done);
+      }
+    )
+  );
 
   // Process user information
   app.passport.verify(async (ctx, user) => {
     app.logger.info('verify', user);
     const u = await ctx.service.user.validatorUser(user);
     if (u) {
-      return u;
+      // ctx.logger.info('hello: ', await u.get());
+      return await u.get();
     }
     ctx.logout();
-    throw ({
+    throw {
       message: '密码或手机错误',
       status: 401,
-    });
+    };
   });
   app.passport.serializeUser(async (ctx, user) => {
-    app.logger.info('serializeUser', user);
+    // app.logger.info('serializeUser', user);
     return user;
   });
   app.passport.deserializeUser(async (ctx, user) => {
-    app.logger.info('deserializeUser', user);
-    user = await ctx.model.User.findByPk(user.id);
+    // app.logger.info('deserializeUser', user);
+    // user = await ctx.model.User.findByPk(user.id);
     return user;
   });
 
