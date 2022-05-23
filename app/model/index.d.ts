@@ -26,3 +26,23 @@ export interface MyFriend {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface Movie {
+  uid?: number;
+  id?: string;
+  rating?: any;
+  pubdate?: string;
+  pic?: any;
+  year?: string;
+  cardSubtitle?: string;
+  genres?: any;
+  title?: string;
+  actors?: any;
+  url?: string;
+  directors?: any;
+  coverUrl?: string;
+  subtype?: string;
+  comment?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
