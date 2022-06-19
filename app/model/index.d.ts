@@ -46,3 +46,36 @@ export interface Movie {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ShareBirthday {
+  id?: number;
+  shareBirthdayId?: number;
+  shareBirthdayAddId?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface HistoryEvent {
+  date?: string;
+  events?: object;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+enum WxSubscriptionStatusEnum {
+  success = 1,
+  fail = 2,
+}
+export interface WxSubscription {
+  id?: number;
+  userId?: number;
+  name?: string;
+  when?: Date;
+  content?: object;
+  status?: WxSubscriptionStatusEnum;
+  templateId?: string;
+  eventId?: number;
+  ErrMessage?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

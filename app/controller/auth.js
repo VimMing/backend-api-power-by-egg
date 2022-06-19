@@ -5,7 +5,6 @@ class AuthController extends Controller {
     const { ctx } = this;
     ctx.logger.info();
     if (ctx.isAuthenticated()) {
-      ctx.logger.info(ctx.user);
       const token = this.app.jwt.sign(
         {
           ...ctx.user,
