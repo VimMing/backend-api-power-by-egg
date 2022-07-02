@@ -1,56 +1,32 @@
+import user from '@/routes/user';
 /**
  * @param {Egg.Application} app - egg application
  */
-module.exports = (app) => {
+export default function (app: Egg.Application) {
   const { router, controller } = app;
   // const gzip = app.middleware.gzip({ threshold: 1024 });
-  const jwt2auth = app.middleware.jwt2auth({ threshold: 1024 });
-  const isAdmin = app.middleware.isAdmin({ threshold: 1024 });
+  const jwt2auth = app.middleware.jwt2auth();
+  const isAdmin = app.middleware.isAdmin();
+  const jwt: any = app.jwt;
   // 用户相关
-  router.post(
-    '/api/user/use-password/login',
-    app.passport.authenticate('local', {
-      successRedirect: '/api/auth/create-token',
-    })
-  );
-  router.get('/api/user/create-token', controller.user.createToken);
-  router.get('/api/user/wxapp-login-by-code', controller.user.wxappLoginBycode);
-  router.get('/api/user/my-friends', controller.user.myfriends);
-  router.get(
-    '/api/user/jwt/my-friends',
-    app.jwt,
-    controller.user.myfriendsByJwt
-  );
-  router.post(
-    '/api/user/updateUserInfo',
-    app.jwt,
-    jwt2auth,
-    controller.user.updateUserInfo
-  );
-  router.post('/api/user/jwt/create', app.jwt, controller.user.createByJwt);
-
+  user(app, jwt2auth);
   router.post(
     '/api/wx/addBirthdayNotice',
-    app.jwt,
+    jwt,
     jwt2auth,
     controller.wx.addBirthdayNotice
   );
   router.get(
     '/api/wx/sendBirthdayNotice',
-    app.jwt,
+    jwt,
     jwt2auth,
     controller.wx.sendBirthdayNotice
   );
-  router.post(
-    '/api/wx/birthdayNotice/list',
-    app.jwt,
-    jwt2auth,
-    controller.wx.list
-  );
+  router.post('/api/wx/birthdayNotice/list', jwt, jwt2auth, controller.wx.list);
 
   router.post(
     '/api/common/lunarToSolar',
-    app.jwt,
+    jwt,
     jwt2auth,
     controller.common.lunarToSolar
   );
@@ -59,14 +35,10 @@ module.exports = (app) => {
     '/api/user/getFriendByShareCode',
     controller.user.getFriendByShareCode
   );
-  router.get(
-    '/api/user/deleteFriendByJwt',
-    app.jwt,
-    controller.user.destoryByJwt
-  );
+  router.get('/api/user/deleteFriendByJwt', jwt, controller.user.destoryByJwt);
   router.get(
     '/api/user/addFriendByOtherManShareByJwt',
-    app.jwt,
+    jwt,
     controller.user.addFriendByOtherManShareByJwt
   );
   router.get(
@@ -84,4 +56,4 @@ module.exports = (app) => {
     isAdmin,
     controller.admin.movie.getTodayPic
   );
-};
+}

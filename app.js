@@ -25,7 +25,6 @@ module.exports = (app) => {
     app.logger.info('verify', user);
     const u = await ctx.service.user.validatorUser(user);
     if (u) {
-      // ctx.logger.info('hello: ', await u.get());
       return await u.get();
     }
     ctx.logout();

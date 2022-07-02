@@ -229,23 +229,15 @@ class UserController extends BaseController {
     );
     ctx.status = result.status;
     const data = JSON.parse(Buffer.from(result.data).toString());
-    // ctx.logger.info(result);
     if (data.errCode) {
       ctx.body = data;
     } else {
-      // let user = await ctx.service.user.find({
-      //   open_id: data.openid,
-      // });
       let user = await ctx.model.User.findOne({
         where: {
           openId: data.openid,
         },
       });
-      // ctx.logger.info('user:', user);
       if (!user) {
-        // user = await ctx.service.user.register({
-        //   open_id: data.openid,
-        // });
         user = await ctx.model.User.create({ openId: data.openid });
         // ctx.logger.info('user:', user, data.openid);
       }
