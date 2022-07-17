@@ -1,9 +1,8 @@
-const Controller = require('egg').Controller;
+import BaseController from './base';
 
-class AuthController extends Controller {
+class AuthController extends BaseController {
   async createToken() {
     const { ctx } = this;
-    ctx.logger.info();
     if (ctx.isAuthenticated()) {
       const token = this.app.jwt.sign(
         {
@@ -16,7 +15,7 @@ class AuthController extends Controller {
       );
       ctx.body = {
         data: 'Bearer ' + token,
-        errcode: 0,
+        errCode: 0,
       };
     } else {
       ctx.throw(401, '没通过权限校验', { data: null });
@@ -28,7 +27,7 @@ class AuthController extends Controller {
     if (ctx.isAuthenticated()) {
       ctx.body = {
         data: ctx.user,
-        errcode: 0,
+        errCode: 0,
       };
     } else {
       ctx.throw(401, '没通过权限校验', { data: null });

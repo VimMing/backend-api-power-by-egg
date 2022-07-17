@@ -1,4 +1,4 @@
-import user from '@/routes/user';
+import user from './routes/user';
 /**
  * @param {Egg.Application} app - egg application
  */
@@ -9,7 +9,7 @@ export default function (app: Egg.Application) {
   const isAdmin = app.middleware.isAdmin();
   const jwt: any = app.jwt;
   // 用户相关
-  user(app, jwt2auth);
+  user(app, jwt2auth, isAdmin);
   router.post(
     '/api/wx/addBirthdayNotice',
     jwt,

@@ -1,4 +1,3 @@
-
 const crypto = require('crypto');
 const Service = require('egg').Service;
 class UserService extends Service {
@@ -6,21 +5,24 @@ class UserService extends Service {
     const user = await this.app.mysql.get('user', query);
     return user;
   }
-  async list({ page = 1, limit = 20 }) {
+  async list({ page = 1, limit = 20 } = {}) {
     const { ctx } = this;
     const list = await ctx.model.User.findAll({
       limit,
       offset: (page - 1) * limit,
     });
     const amount = await ctx.model.User.count();
-    return { list, amount };
+    return { list, amount, page };
   }
   async getMyFriends(uid) {
     const mysql = this.app.mysql;
     const user = await mysql.get('user', { id: uid });
     let res = [];
     if (user) {
-      const friends = await mysql.query('select * from my_friend as m join user as u on m.friend_id = u.id where m.my_id = ?;', [ mysql.escape(uid) ]);
+      const friends = await mysql.query(
+        'select * from my_friend as m join user as u on m.friend_id = u.id where m.my_id = ?;',
+        [mysql.escape(uid)]
+      );
       res = friends || [];
     }
     return res;
@@ -32,21 +34,33 @@ class UserService extends Service {
   }
   async addFriend({ name, birthday, isLunar }, user) {
     const mysql = this.app.mysql;
-    const res = await mysql.insert('user', { name, birthday, is_lunar: isLunar });
-    await mysql.insert('my_friend', { my_id: user.id, friend_id: res.insertId });
+    const res = await mysql.insert('user', {
+      name,
+      birthday,
+      is_lunar: isLunar,
+    });
+    await mysql.insert('my_friend', {
+      my_id: user.id,
+      friend_id: res.insertId,
+    });
     return await this.app.mysql.get('user', { id: res.insertId });
   }
   async validatorUser(user) {
     const { ctx } = this;
-    const u = await ctx.model.User.findOne({ where: { mobile: user.username } });
+    const u = await ctx.model.User.findOne({
+      where: { mobile: user.username },
+    });
     if (u) {
-      const pwd = await crypto.createHash('md5').update(user.password + '').digest('hex');
+      const pwd = await crypto
+        .createHash('md5')
+        .update(user.password + '')
+        .digest('hex');
       // ctx.logger.info('verify %s %s', u.password, pwd);
       return u.password === pwd ? u : false;
     }
-    throw ({
+    throw {
       message: '手机号不存在',
-    });
+    };
   }
 }
 
