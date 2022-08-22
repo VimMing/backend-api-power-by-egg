@@ -1,6 +1,4 @@
-// const LunarCalendar = require('lunar-calendar');
-// console.log(lunarToSolar);
-import LunarCalendar from 'lunar-calendar';
+const LunarCalendar = require('lunar-calendar');
 export function lunarToSolar(
   y: number,
   m: number,

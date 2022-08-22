@@ -7,12 +7,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "files.exclude": {
-    "**/*.js": {
-      "when": "$(basename).ts"
-    },
-    "**/**.js": {
-      "when": "$(basename).tsx"
-    }
+    // "**/*.js": {
+    //   "when": "$(basename).ts"
+    // },
+    // "**/**.js": {
+    //   "when": "$(basename).tsx"
+    // }
   }
   // "liveServer.settings.port": 5501
 }
