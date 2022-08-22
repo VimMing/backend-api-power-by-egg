@@ -64,8 +64,3 @@ export function formatTime(
   }
   return t;
 }
-
-module.exports = {
-  lunarToSolar,
-  formatTime,
-};
