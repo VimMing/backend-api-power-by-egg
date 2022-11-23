@@ -8,6 +8,11 @@ class UserController extends BaseController {
     );
     ctx.body = { data: { list, amount, page }, errCode: 0 };
   }
+  async test() {
+    const ctx = this.ctx;
+    console.log(ctx);
+    ctx.body = { errCode: 0 };
+  }
 }
 
 export default UserController;

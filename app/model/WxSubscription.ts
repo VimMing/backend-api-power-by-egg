@@ -1,9 +1,8 @@
-import {
-  sequlizeModel,
-  WxSubscription as WxSubscriptionInterface,
-} from './index';
-
-export default (app): sequlizeModel<WxSubscriptionInterface> => {
+import { WxSubscription as WxSubscriptionInterface } from './index';
+import { ModelDefined } from 'sequelize';
+export default (
+  app
+): ModelDefined<WxSubscriptionInterface, WxSubscriptionInterface> => {
   const { STRING, INTEGER, DATE, JSON } = app.Sequelize;
 
   const WxSubscription = app.model.define(

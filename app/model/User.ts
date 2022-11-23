@@ -1,6 +1,6 @@
-import { sequlizeModel, User as UserInterface } from './index';
-
-export default (app): sequlizeModel<UserInterface> => {
+import { User as UserInterface } from './index';
+import { ModelDefined } from 'sequelize';
+export default (app): ModelDefined<UserInterface, UserInterface> => {
   const { STRING, INTEGER, DATE, BOOLEAN } = app.Sequelize;
 
   const User = app.model.define(

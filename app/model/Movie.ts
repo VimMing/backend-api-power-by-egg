@@ -1,6 +1,7 @@
-import { sequlizeModel, Movie as MovieInterface } from './index';
+import { Movie as MovieInterface } from './index';
+import { ModelDefined } from 'sequelize';
 
-export default (app): sequlizeModel<MovieInterface> => {
+export default (app): ModelDefined<MovieInterface, MovieInterface> => {
   const { STRING, INTEGER, DATE, JSON } = app.Sequelize;
 
   const Movie = app.model.define(

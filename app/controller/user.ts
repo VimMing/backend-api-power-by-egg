@@ -183,14 +183,14 @@ class UserController extends BaseController {
       };
     }
     if (ctx.isAuthenticated()) {
-      const friend = await ctx.model.MyFriend.findByPk(id);
-      // ctx.logger.info('friend', friend);
-      if (!friend) {
+      const friendModel = await ctx.model.MyFriend.findByPk(id);
+      if (!friendModel) {
         throw {
           message: '记录不存在',
           status: 200,
         };
       }
+      const friend = friendModel.get();
       if (friend && +friend.userId !== +ctx.user.id) {
         const res = await ctx.model.MyFriend.create({
           name: friend.name,
@@ -241,7 +241,7 @@ class UserController extends BaseController {
         user = await ctx.model.User.create({ openId: data.openid });
         // ctx.logger.info('user:', user, data.openid);
       }
-      await ctx.login(user.dataValues);
+      await ctx.login(user.get());
       await this.createToken();
     }
   }

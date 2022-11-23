@@ -1,6 +1,6 @@
-import { sequlizeModel, MyFriend as MyFriendInterface } from './index';
-
-export default (app): sequlizeModel<MyFriendInterface> => {
+import { MyFriend as MyFriendInterface } from './index';
+import { ModelDefined } from 'sequelize';
+export default (app): ModelDefined<MyFriendInterface, MyFriendInterface> => {
   const { STRING, INTEGER, DATE, BOOLEAN } = app.Sequelize;
 
   const MyFriend = app.model.define(

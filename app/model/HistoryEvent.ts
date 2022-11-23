@@ -1,6 +1,9 @@
-import { sequlizeModel, HistoryEvent as HistoryEventInterface } from './index';
+import { HistoryEvent as HistoryEventInterface } from './index';
+import { ModelDefined } from 'sequelize';
 
-export default (app): sequlizeModel<HistoryEventInterface> => {
+export default (
+  app
+): ModelDefined<HistoryEventInterface, HistoryEventInterface> => {
   const { JSON, DATE, STRING } = app.Sequelize;
 
   const HistoryEvent = app.model.define(

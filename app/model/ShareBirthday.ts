@@ -1,9 +1,9 @@
-import {
-  sequlizeModel,
-  ShareBirthday as ShareBirthdayInterface,
-} from './index';
+import { ShareBirthday as ShareBirthdayInterface } from './index';
+import { ModelDefined } from 'sequelize';
 
-export default (app): sequlizeModel<ShareBirthdayInterface> => {
+export default (
+  app
+): ModelDefined<ShareBirthdayInterface, ShareBirthdayInterface> => {
   const { INTEGER, DATE } = app.Sequelize;
 
   const ShareBirthday = app.model.define(
