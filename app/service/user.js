@@ -1,13 +1,15 @@
 const crypto = require('crypto');
 const Service = require('egg').Service;
+import { getWhereClauses } from '@/utils';
 class UserService extends Service {
   async find(query) {
     const user = await this.app.mysql.get('user', query);
     return user;
   }
-  async list({ page = 1, limit = 20 } = {}) {
+  async list({ page = 1, limit = 20, __searchForm = [] } = {}) {
     const { ctx } = this;
     const list = await ctx.model.User.findAll({
+      where: getWhereClauses(__searchForm),
       limit,
       offset: (page - 1) * limit,
     });

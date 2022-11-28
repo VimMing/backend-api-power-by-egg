@@ -1,4 +1,5 @@
 const LunarCalendar = require('lunar-calendar');
+import { Op } from 'sequelize';
 export function lunarToSolar(
   y: number,
   m: number,
@@ -61,4 +62,35 @@ export function formatTime(
     t.setFullYear(y);
   }
   return t;
+}
+
+type SearchFormItem = {
+  fieldValue: string | number;
+  fieldCode: string;
+  operator: string;
+  logic: string;
+};
+export function getWhereClauses(forms: Array<SearchFormItem>) {
+  const searchForm = forms.filter((i) => i.fieldValue);
+  const andLogics = searchForm.filter((i) => i.logic === 'AND');
+  const orLogics = searchForm.filter((i) => i.logic === 'OR');
+  const andClauses = andLogics.map((i) => {
+    return {
+      [i.fieldCode]: {
+        [Op[i.operator]]: i.fieldValue,
+      },
+    };
+  });
+  const orClauses = orLogics.map((i) => {
+    return {
+      [i.fieldCode]: {
+        [Op[i.operator]]: i.fieldValue,
+      },
+    };
+  });
+  const where = {
+    [Op.and]: andClauses,
+    [Op.or]: orClauses,
+  };
+  return where;
 }
