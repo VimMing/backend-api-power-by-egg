@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const Service = require('egg').Service;
-import { getWhereClauses } from '@/utils';
+import { getWhereClauses } from '../utils';
 class UserService extends Service {
   async find(query) {
     const user = await this.app.mysql.get('user', query);
@@ -13,7 +13,9 @@ class UserService extends Service {
       limit,
       offset: (page - 1) * limit,
     });
-    const amount = await ctx.model.User.count();
+    const amount = await ctx.model.User.count({
+      where: getWhereClauses(__searchForm),
+    });
     return { list, amount, page };
   }
   async getMyFriends(uid) {
@@ -29,7 +31,7 @@ class UserService extends Service {
     }
     return res;
   }
-  async register({ open_id } = {}) {
+  async register({ open_id = '' } = {}) {
     const mysql = this.app.mysql;
     const res = await mysql.insert('user', { open_id });
     return await this.app.mysql.get('user', { id: res.insertId });

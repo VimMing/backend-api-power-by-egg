@@ -88,9 +88,12 @@ export function getWhereClauses(forms: Array<SearchFormItem>) {
       },
     };
   });
-  const where = {
-    [Op.and]: andClauses,
-    [Op.or]: orClauses,
-  };
+  const where = {};
+  if (andClauses.length) {
+    where[Op.and] = andClauses;
+  }
+  if (orClauses.length) {
+    where[Op.or] = orClauses;
+  }
   return where;
 }
