@@ -12,6 +12,7 @@ export default function (app: Egg.Application) {
   // 用户相关
   user(app, jwt2auth, isAdmin);
   friends(app, jwt2auth, isAdmin);
+
   router.post(
     '/api/wx/addBirthdayNotice',
     jwt,
