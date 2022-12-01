@@ -96,9 +96,9 @@ class WxService extends Service {
         const page = `/pages/index/detail?shareCode=${i.content.shareCode}`;
         const d = new Date(i.content.birthday);
         const name = i.content.name;
+        const today = new Date();
         let solarBirthday = '';
         if (i.content.isLunar && d) {
-          const today = new Date();
           solarBirthday = lunarToSolar(
             today.getFullYear(),
             d.getMonth() + 1,
@@ -106,7 +106,7 @@ class WxService extends Service {
           );
         } else if (d) {
           solarBirthday = {
-            year: d.getFullYear(),
+            year: today.getFullYear(),
             month: d.getMonth() + 1,
             day: d.getDate(),
           };
@@ -129,15 +129,15 @@ class WxService extends Service {
           page,
           data: {
             time1: {
-              value: `${solarBirthday.year}年${solarBirthday.month}月${solarBirthday.day}日`,
+              value: `${solarBirthday.month}月${solarBirthday.day}日`,
             },
             thing3: {
               value: name,
             },
             thing2: {
-              value: `距离他的(${
-                i.content.isLunar ? '农历' : '公历'
-              })生日还有${distance}天`,
+              value: `距离他的(${i.content.isLunar ? '农历' : '公历'})生日还有${
+                distance > 0 ? distance : 0
+              }天`,
             },
           },
         };
