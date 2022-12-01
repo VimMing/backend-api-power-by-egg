@@ -78,7 +78,7 @@ class UserService extends Service {
     // Fill background
     ctx.fillStyle = 'rgba(250, 250, 250, 1)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    await loadImage(data.comment.poster).then((img) => {
+    await loadImage(data.coverUrl).then((img) => {
       const subArr = data.cardSubtitle.replace('\n', '/').split('/');
       const today = new Date();
       ctx.fillStyle = 'rgba(0, 0, 0, 1)';

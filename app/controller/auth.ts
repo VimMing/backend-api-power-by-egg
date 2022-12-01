@@ -1,6 +1,7 @@
 import BaseController from './base';
 
 class AuthController extends BaseController {
+  modelName = 'User';
   async createToken() {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {

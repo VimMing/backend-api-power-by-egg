@@ -1,5 +1,7 @@
 import user from './routes/user';
 import friends from './routes/friends';
+import movie from './routes/movie';
+import wxSubscription from './routes/wxSubscription';
 /**
  * @param {Egg.Application} app - egg application
  */
@@ -12,6 +14,8 @@ export default function (app: Egg.Application) {
   // 用户相关
   user(app, jwt2auth, isAdmin);
   friends(app, jwt2auth, isAdmin);
+  movie(app, jwt2auth, isAdmin);
+  wxSubscription(app, jwt2auth, isAdmin);
 
   router.post(
     '/api/wx/addBirthdayNotice',

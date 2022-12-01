@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import { lunarToSolar } from '../utils';
 import BaseController from './base';
 class UserController extends BaseController {
+  modelName = 'User';
   async createToken() {
     const { ctx } = this;
     if (ctx.isAuthenticated()) {

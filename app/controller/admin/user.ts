@@ -1,6 +1,7 @@
 import BaseController from '../base';
 
 class UserController extends BaseController {
+  modelName = 'User';
   async list() {
     const ctx = this.ctx;
     const { list, amount, page } = await this.service.user.list(
