@@ -17,4 +17,4 @@ config/config.test.js
 config/config.dev.js
 database/config.local.json
 config/env
-app/public
+app/public/douban
