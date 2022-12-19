@@ -14,4 +14,9 @@ export default function movie(
     isAdmin,
     controller.admin.movie.list
   );
+
+  router.get(
+    '/api/movie/getMiniMyModuleBgImage',
+    controller.movie.getMiniMyModuleBgImage
+  );
 }
