@@ -18,18 +18,28 @@ export function lunarToSolar(
     2042: 2,
   };
   // eslint-disable-next-line prefer-const
-  let ly = y - 1,
-    lm = m;
-  if (map[ly] && map[ly] < lm) {
-    lm = lm + 1;
-  }
+  // let ly = y - 1,
+  //   lm = m;
+  // if (map[ly] && map[ly] < lm) {
+  //   lm = lm + 1;
+  // }
+  // 需要获得农历年
+  const today = new Date();
+  const lunarDate = LunarCalendar.solarToLunar(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    today.getDate()
+  );
+  y = lunarDate.lunarYear;
   if (map[y] && map[y] < m) {
     m = m + 1;
   }
-  const l_s = LunarCalendar.lunarToSolar(ly, lm, d);
-  if (parseInt(l_s.year) === +y) {
-    return l_s;
-  }
+  // const l_s = LunarCalendar.lunarToSolar(ly, lm, d);
+  // const c_s = LunarCalendar.lunarToSolar(y, m, d);
+
+  // if (parseInt(l_s.year) === +y) {
+  //   return l_s;
+  // }
 
   return LunarCalendar.lunarToSolar(y, m, d);
 }
