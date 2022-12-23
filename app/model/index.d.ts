@@ -16,6 +16,7 @@ export interface User {
 
 export interface MyFriend {
   id?: number;
+  friendId?: number;
   userId: number;
   name: string;
   birthday: Date;

@@ -11,6 +11,10 @@ export default (app): ModelDefined<MyFriendInterface, MyFriendInterface> => {
         type: INTEGER,
         field: 'user_id',
       },
+      friendId: {
+        type: INTEGER,
+        field: 'friend_id',
+      },
       name: STRING,
       birthday: DATE,
       isLunar: {

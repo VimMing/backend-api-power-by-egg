@@ -80,6 +80,14 @@ class UserController extends BaseController {
       };
     }
   }
+
+  async getSelfInfo() {
+    const { ctx } = this;
+    ctx.body = {
+      data: ctx.user,
+      errCode: 0,
+    };
+  }
   async create() {
     // 新增用户
     const { ctx } = this;
@@ -115,6 +123,44 @@ class UserController extends BaseController {
       ctx.body = friend;
     } else {
       ctx.throw(401, '权限校验失败', { data: null });
+    }
+  }
+
+  async createByInvitation() {
+    const { ctx } = this;
+    ctx.validate({
+      name: 'string',
+      birthday: 'date',
+      isLunar: 'boolean',
+      zodiac: 'int',
+      userId: 'int',
+    });
+    const { userId, name, birthday, isLunar, zodiac } = ctx.request.body;
+    const isExist = await ctx.model.MyFriend.findOne({
+      where: {
+        userId,
+        friendId: ctx.user.id,
+      },
+    });
+    if (isExist === null) {
+      const friend = await ctx.model.MyFriend.create({
+        name,
+        birthday,
+        isLunar,
+        zodiac,
+        friendId: ctx.user.id,
+        userId,
+      });
+      ctx.body = {
+        data: friend,
+        errCode: 0,
+      };
+    } else {
+      ctx.body = {
+        data: isExist.get(),
+        errCode: 1,
+        errMsg: '已经添加了',
+      };
     }
   }
 
@@ -258,8 +304,6 @@ class UserController extends BaseController {
   async myfriends() {
     const ctx = this.ctx;
     if (ctx.isAuthenticated()) {
-      // ctx.logger.info('user: hello world', ctx.user);
-      // const friends = await ctx.service.user.getMyFriends(ctx.user.id) || [];
       const friends = await ctx.model.MyFriend.findAll({
         where: {
           userId: ctx.user.id,

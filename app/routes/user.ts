@@ -16,7 +16,20 @@ export default function user(
     jwt2auth,
     controller.user.updateUserInfo
   );
+  router.get(
+    '/api/user/getSelfInfo',
+    jwt,
+    jwt2auth,
+    controller.user.getSelfInfo
+  );
   router.post('/api/user/jwt/create', jwt, controller.user.createByJwt);
+
+  router.post(
+    '/api/user/createByInvitation',
+    jwt,
+    jwt2auth,
+    controller.user.createByInvitation
+  );
 
   // -------------admin下面的user模块接口
   router.post(
