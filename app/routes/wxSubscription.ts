@@ -6,6 +6,13 @@ export default function wxSubscription(
   const { router, controller } = app;
   const jwt: any = app.jwt;
 
+  router.get(
+    '/api/wxSubscription/destory',
+    jwt,
+    jwt2auth,
+    controller.wxSubscription.destory
+  );
+
   // -------------admin下面的wxSubscription模块接口
   router.post(
     '/api/admin/wxSubscription/list',
