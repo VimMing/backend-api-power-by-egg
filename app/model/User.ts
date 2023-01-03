@@ -17,7 +17,10 @@ export default (app): ModelDefined<UserInterface, UserInterface> => {
         type: DATE,
         field: 'created_at',
       },
-      nickname: STRING,
+      nickName: {
+        field: 'nickname',
+        type: STRING,
+      },
       updatedAt: {
         type: DATE,
         field: 'updated_at',

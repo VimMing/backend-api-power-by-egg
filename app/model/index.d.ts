@@ -6,7 +6,7 @@ export interface User {
   mobile?: string;
   password?: string;
   openId?: string;
-  nickname?: string;
+  nickName?: string;
   avatarUrl?: string;
   isAdmin?: boolean;
   dataValues?: any;

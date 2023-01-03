@@ -60,17 +60,21 @@ class UserController extends BaseController {
     }
   }
 
-  // /user/updateUserInfo
   async updateUserInfo() {
     const { ctx } = this;
-    ctx.validate({ avatarUrl: 'string', nickName: 'string' });
     const user = await ctx.model.User.findByPk(ctx.user.id);
     const { nickName, avatarUrl } = ctx.request.body;
     if (user) {
-      await user.update({
-        nickname: nickName,
-        avatarUrl,
-      });
+      if (nickName) {
+        await user.update({
+          nickName,
+        });
+      }
+      if (avatarUrl) {
+        await user.update({
+          avatarUrl,
+        });
+      }
       ctx.body = {
         errCode: 0,
       };
@@ -83,8 +87,14 @@ class UserController extends BaseController {
 
   async getSelfInfo() {
     const { ctx } = this;
+    const birthday = await ctx.model.MyFriend.findOne({
+      where: {
+        userId: ctx.user.id,
+        friendId: ctx.user.id,
+      },
+    });
     ctx.body = {
-      data: ctx.user,
+      data: { ...ctx.user, birthday },
       errCode: 0,
     };
   }
@@ -151,6 +161,22 @@ class UserController extends BaseController {
         friendId: ctx.user.id,
         userId,
       });
+      const myBirthday = await ctx.model.MyFriend.findOne({
+        where: {
+          userId: ctx.user.id,
+          friendId: ctx.user.id,
+        },
+      });
+      if (!myBirthday) {
+        await ctx.model.MyFriend.create({
+          name,
+          birthday,
+          isLunar,
+          zodiac,
+          friendId: ctx.user.id,
+          userId: ctx.user.id,
+        });
+      }
       ctx.body = {
         data: friend,
         errCode: 0,
